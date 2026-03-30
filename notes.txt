@@ -1,0 +1,59 @@
+INSERT INTO contas VALUES("Volim Habá", 1, 0);
+create table contas (titular varchar(50), id_conta int, saldo float)
+
+https://scs.owasp.org/sctop10/SC01-AccessControlVulnerabilities/#description
+
+ToDo:
+
+Audit & Log System
+Custom Exceptions
+Security & Password Hashing
+External API Integration
+Unit Testing
+Dockerization
+Database Integration & ORM
+API Documentation
+Architecture Diagrams
+Repository Badges
+Installation Guide
+Loan Simulator
+Statement Exporting
+Lessons Learned Section
+
+
+
+project-root/
+├── .venv/                          
+├── accounts/                       
+│   ├── __pycache__/
+│   ├── routes/                     
+│   │   ├── __pycache__/
+│   │   ├── __init__.py
+│   │   ├── route_add_accounts.py
+│   │   ├── route_list_accounts.py
+│   │   ├── route_update_accounts.py
+│   │   └── route_update_password.py
+│   ├── __init__.py
+│   ├── auth_model.py               
+│   ├── models.py                   
+│   └── schemas.py                  
+├── blockchain_services/                             
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   └── route_withdraw.py
+│   └── services/
+│   │   ├── __init__.py
+│   │   └── blockchain.py
+├── db/                             
+│   ├── __pycache__/
+│   ├── __init__.py
+│   ├── crud.py                     
+│   └── database.py
+├── accounts.db                     
+├── app.py                          
+└── notes.txt                       
+
+
+
+
+
