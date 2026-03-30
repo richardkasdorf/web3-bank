@@ -44,13 +44,13 @@ This project is under active development. Below is the roadmap for upcoming feat
 * **Pydantic:** Data validation and settings management.
 
 ## Installation & Setup
-1 Clone the repository: ...
-2 Install dependencies: pip install -r requirements.txt
-3 Environment Variables (.env): Create a .env file in the root directory:
+* Clone the repository: ...
+* Install dependencies: pip install -r requirements.txt
+* Environment Variables (.env): Create a .env file in the root directory:
 SEPOLIA_RPC=your_infura_or_alchemy_url
 BANK_PRIVATE_KEY=your_64_char_private_key
 USDC_CONTRACT=0x1c7D4B196Cb0232b3044B3374241B7454231f855
-4 Run the API: python -m uvicorn app:app --reload
+* Run the API: python -m uvicorn app:app --reload
 
 ## Security & Core
 * Security & Password Hashing: Implement BCrypt/Argon2.
