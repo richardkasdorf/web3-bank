@@ -28,3 +28,4 @@ class InternalTransferRequest(BaseModel):
     id_destino: str
     amount: Decimal
 
+

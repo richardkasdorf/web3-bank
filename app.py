@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from accounts.routes import account_routers
 from blockchain_services.routes.route_withdraw import router as withdraw_router
 from dotenv import load_dotenv
@@ -13,9 +13,10 @@ app = FastAPI(
     version="1.0.0"
 )
 
+
+# Internal Route - Bank Operation
 for router in account_routers:
     app.include_router(router)
-
 
 # Blockchain Route - Withdraw USDC
 app.include_router(withdraw_router, prefix="/api")

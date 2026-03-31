@@ -3,14 +3,16 @@ from sqlalchemy.orm import Session
 from accounts.models import Account
 from accounts.auth_model import get_password_hash
 from accounts.schemas import AccountCreate, UpateAccount, UpdatePassword
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
+from typing import Annotated
 
+
+
+## ADMIN ONLY
 
 def get_all_accounts(db: Session):
     db.expire_all() 
     return db.query(Account).all()
-
-## ----------------------------------------- ##
 
 def generate_unique_id(db: Session):
     while True:
@@ -32,9 +34,6 @@ def add_account(db: Session, account_data: AccountCreate):
     db.refresh(db_account)
     return db_account
 
-## ----------------------------------------- ##
-
-## ADMIN ONLY
 def update_account(db: Session, id_conta: str, account_data: UpateAccount):
     db_account = db.query(Account).filter(Account.id_conta == id_conta).first()
     if not db_account:
@@ -52,6 +51,7 @@ def update_account(db: Session, id_conta: str, account_data: UpateAccount):
 ## ----------------------------------------- ##
 
 ## CLIENTE ONLY
+
 def update_password(db: Session, id_conta: str, password_data: UpdatePassword):
     db_account = db.query(Account).filter(Account.id_conta == id_conta).first()
     if not db_account:
@@ -89,6 +89,7 @@ def internal_transfer(db: Session, id_origem: str, id_destino: str, amount: floa
 ## ----------------------------------------- ##
 
 ## Blockchain Use
+
 def get_account_by_id(db: Session, id_conta: str):
     db_account = db.query(Account).filter(Account.id_conta == id_conta).first()
     return db_account
