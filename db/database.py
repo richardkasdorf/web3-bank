@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from pathlib import Path
-import os
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DB_URL = f"sqlite:///{BASE_DIR}/accounts.db"

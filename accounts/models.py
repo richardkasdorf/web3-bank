@@ -1,6 +1,5 @@
 from db.database import Base
 from sqlalchemy import Column, String, Float, Integer, Numeric
-from pathlib import Path
 from typing import Optional
 
 class Account(Base):

@@ -49,6 +49,6 @@ async def withdraw(
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao processar saque: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Withdraw error: {str(e)}")
     
 

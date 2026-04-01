@@ -9,10 +9,7 @@ from accounts.auth_model import create_access_token, verify_password
 router = APIRouter(tags=["Authentication"])
 
 @router.post("/token")
-def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(), 
-    db: Session = Depends(get_db)
-):
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     try:
         account_id = int(form_data.username)
     except ValueError:
