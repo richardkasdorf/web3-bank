@@ -3,8 +3,7 @@ from sqlalchemy.orm import Session
 from accounts.models import Account
 from accounts.auth_model import get_password_hash
 from accounts.schemas import AccountCreate, UpateAccount, UpdatePassword
-from fastapi import HTTPException, Depends
-from typing import Annotated
+from fastapi import HTTPException
 
 
 

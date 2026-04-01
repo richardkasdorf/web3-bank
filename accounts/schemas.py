@@ -24,8 +24,11 @@ class UpdatePassword(BaseModel):
     password: str
 
 class InternalTransferRequest(BaseModel):
-    id_origem: str
     id_destino: str
     amount: Decimal
+
+
+
+
 
 
