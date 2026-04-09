@@ -12,6 +12,7 @@ project-root/
 │   │   ├── route_add_accounts.py
 |   |   ├── route_intrabank_transfer.py
 │   │   ├── route_list_accounts.py
+|   |   ├── route_login_account.py
 │   │   ├── route_update_accounts.py
 │   │   └── route_update_password.py
 │   ├── __init__.py

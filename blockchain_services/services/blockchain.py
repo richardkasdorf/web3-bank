@@ -44,7 +44,7 @@ ERC20_ABI = [
 usdc_contract = w3.eth.contract(address=USDC_CONTRACT, abi=ERC20_ABI)
 
 def get_usdc_balance(address: str) -> Decimal:
-    """Retorna o saldo de USDC de qualquer endereço"""
+    """Return balance USDC from any address"""
     try:
         balance_wei = usdc_contract.functions.balanceOf(address).call()
         return Decimal(balance_wei) / Decimal(10**6) 
