@@ -2,7 +2,7 @@
 services:
   # Keys (Vault)
   vault:
-    image: hashicorp/vault:latest
+    image: hashicorp/vault:1.15
     container_name: bank_vault
     ports:
       - "8200:8200"
@@ -26,7 +26,9 @@ services:
       - DATABASE_URL=sqlite:///./sql_app.db 
     volumes:
       - .:/app
+      - bank_data:/data
     env_file:
       - .env
-
+volumes:
+  bank_data:
   
