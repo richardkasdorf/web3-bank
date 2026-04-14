@@ -1,37 +1,50 @@
 import random
 from sqlalchemy.orm import Session
-from accounts.models import Account
+from accounts.models import Account, User
 from accounts.auth_model import get_password_hash
-from accounts.schemas import AccountCreate, UpateAccount, UpdatePassword
+from accounts.schemas import CreateAccount, UpateAccount, UpdatePassword
 from fastapi import HTTPException
-
+import os
 
 
 ## ADMIN ONLY
 
 def get_all_accounts(db: Session):
     db.expire_all() 
-    return db.query(Account).all()
+    return db.query(User).all()
+
+
 
 def generate_unique_id(db: Session):
     while True:
         new_id = random.randint(100000, 999999)
-        exists = db.query(Account).filter(Account.id_conta == new_id).first()
+        exists = db.query(User).filter(User.id == new_id).first()
         if not exists:
             return new_id
 
-def add_account(db: Session, account_data: AccountCreate):
+def create_user_with_account(db: Session, user: CreateAccount):
     unique_id = generate_unique_id(db)
+    hashed_password = get_password_hash(user.password)
 
-    db_account = Account(
-        titular = account_data.titular,
-        id_conta = unique_id,
-        email = account_data.email,
-        hashed_password = get_password_hash(account_data.hashed_password))
-    db.add(db_account)
-    db.commit()
-    db.refresh(db_account)
-    return db_account
+    db_user = User(id=unique_id, full_name=user.full_name, email=user.email, hashed_password=hashed_password)
+    db.add(db_user)
+
+    db.flush()
+
+    new_account = Account(user_id=db_user.id, balance=0.0, wallet_address=f"0x{os.urandom(20).hex()}")
+    db.add(new_account)
+
+    try:
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        db.rollback()
+        raise e
+
+
+
+
 
 def update_account(db: Session, id_conta: str, account_data: UpateAccount):
     db_account = db.query(Account).filter(Account.id_conta == id_conta).first()

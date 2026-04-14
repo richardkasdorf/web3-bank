@@ -2,9 +2,10 @@ from fastapi import FastAPI, Depends
 from accounts.routes import account_routers
 from blockchain_services.routes.route_withdraw import router as withdraw_router
 from dotenv import load_dotenv
-from blockchain_services.services.blockchain import get_bank_address
+from db.database import engine, Base
+from accounts.models import User, Account, TransactionLedger 
 
-# python -m uvicorn app:app --reload START !!!!!!!!!!!!!
+Base.metadata.create_all(bind=engine)
 
 load_dotenv()
 

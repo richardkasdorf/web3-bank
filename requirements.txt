@@ -6,6 +6,7 @@ eth-account==0.13.7
 SQLAlchemy==2.0.48
 pydantic==2.12.5
 pydantic-settings==2.13.1
+pydantic[email]
 PyJWT==2.12.1
 passlib[bcrypt]==1.7.4
 python-jose[cryptography]==3.5.0
@@ -15,6 +16,7 @@ httpx==0.28.1
 slowapi==0.1.9
 sentry-sdk==2.54.0
 pwdlib[argon2]
+psycopg2-binary
 
 
 

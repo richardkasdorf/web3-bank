@@ -1,20 +1,21 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 from decimal import Decimal
 
+
+class CreateAccount(BaseModel):
+    full_name: str
+    email: EmailStr
+    password: str
+
 class ContaRead(BaseModel):
     titular: str
-    id_conta: int
+    id: int
     saldo: float
     hashed_password: str
     email: Optional[str] = None
     class Config:
         from_attributes = True
-
-class AccountCreate(BaseModel):
-    titular: str
-    email: str
-    hashed_password: str
 
 class UpateAccount(BaseModel):
     titular: Optional[str] = None

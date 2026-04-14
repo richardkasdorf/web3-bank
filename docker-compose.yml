@@ -20,15 +20,36 @@ services:
       - "8000:8000"
     depends_on:
       - vault
+      - db
     environment:
       - VAULT_URL=http://vault:8200
       - VAULT_TOKEN=root_token_estudo
-      - DATABASE_URL=sqlite:///./sql_app.db 
+      - DATABASE_URL=postgresql://user_admin:password_123@db:5432/bank_digital 
     volumes:
       - .:/app
       - bank_data:/data
     env_file:
       - .env
+
+  db:
+    image: postgres:15
+    container_name: bank_db
+    restart: always
+    environment:
+      POSTGRES_USER: user_admin
+      POSTGRES_PASSWORD: password_123
+      POSTGRES_DB: bank_digital
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+      
 volumes:
   bank_data:
-  
+
+
+

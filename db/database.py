@@ -1,12 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from pathlib import Path
+import os
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DB_URL = f"sqlite:///{BASE_DIR}/accounts.db"
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user_admin:password_123@db:5432/bank_digital")
 
-engine = create_engine(DB_URL, connect_args={"check_same_thread": False})
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -19,4 +18,3 @@ def get_db():
 
 
 
-        
