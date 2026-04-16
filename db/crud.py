@@ -2,18 +2,15 @@ import random
 from sqlalchemy.orm import Session
 from accounts.models import Account, User
 from accounts.auth_model import get_password_hash
-from accounts.schemas import CreateAccount, UpateAccount, UpdatePassword
+from accounts.schemas import CreateAccount, UpdateAccount, UpdatePassword
 from fastapi import HTTPException
 import os
 
 
-## ADMIN ONLY
 
 def get_all_accounts(db: Session):
     db.expire_all() 
     return db.query(User).all()
-
-
 
 def generate_unique_id(db: Session):
     while True:
@@ -42,23 +39,22 @@ def create_user_with_account(db: Session, user: CreateAccount):
         db.rollback()
         raise e
 
+def update_account(db: Session, user_id: int, update: dict):
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code = 404, detail = "Not found!")
 
-
-
-
-def update_account(db: Session, id_conta: str, account_data: UpateAccount):
-    db_account = db.query(Account).filter(Account.id_conta == id_conta).first()
-    if not db_account:
-        raise HTTPException(status_code = 404, detail = "Não encontrado")
-
-    update_data = account_data.model_dump(exclude_unset = True)
-
-    for field, value in update_data.items():
-        setattr(db_account, field, value)
+    for field, value in update.items():
+        if hasattr(db_user, field):
+            setattr(db_user, field, value)
     
-    db.commit()
-    db.refresh(db_account)
-    return db_account
+    try:
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        db.rollback()
+        raise e
 
 ## ----------------------------------------- ##
 

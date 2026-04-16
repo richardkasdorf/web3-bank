@@ -8,19 +8,18 @@ class CreateAccount(BaseModel):
     email: EmailStr
     password: str
 
-class ContaRead(BaseModel):
-    titular: str
-    id: int
-    saldo: float
-    hashed_password: str
-    email: Optional[str] = None
-    class Config:
-        from_attributes = True
+class UpdateAccount(BaseModel):
+    email: EmailStr
 
-class UpateAccount(BaseModel):
-    titular: Optional[str] = None
-    saldo: Optional[float] = None
-    
+
+
+
+
+class ContaRead(BaseModel):
+    full_name: str
+    email: EmailStr
+
+
 class UpdatePassword(BaseModel):
     password: str
 

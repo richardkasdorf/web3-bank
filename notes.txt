@@ -3,6 +3,10 @@ create table contas (titular varchar(50), id_conta int, saldo float)
 
 https://scs.owasp.org/sctop10/SC01-AccessControlVulnerabilities/#description
 
+http://localhost:8080/?pgsql
+http://localhost:8000/docs
+cd "/mnt/c/Users/richa/OneDrive/Área de Trabalho/C++/Estudos_Python"
+
 ToDo:
 
 Audit & Log System
