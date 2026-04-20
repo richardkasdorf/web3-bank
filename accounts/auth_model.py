@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from accounts.models import Account
+from accounts.models import Account, User
 from fastapi import Depends, HTTPException, status
 from db.database import get_db
 from sqlalchemy.orm import Session
@@ -49,11 +49,11 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    user = db.query(Account).filter(Account.user_id == int(user_id)).first()
+    user = db.query(User).filter(User.id == int(user_id)).first()
     
     if user is None:
         raise credentials_exception
-        
+    
     return user 
 
 

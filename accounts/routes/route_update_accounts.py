@@ -15,12 +15,12 @@ def patch_account(user_id: str, account_data: UpdateAccount, db: Session = Depen
     update_data = account_data.model_dump(exclude_unset=True)
     
     if not update_data:
-        raise HTTPException(status_code=400, detail="Nenhum dado fornecido para atualização")
+        raise HTTPException(status_code=400, detail="Data error")
 
     db_account = crud.update_account(db, user_id=user_id, update=update_data)
     
     if db_account is None:
-        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+        raise HTTPException(status_code=404, detail="User do not exist")
         
     return db_account
 

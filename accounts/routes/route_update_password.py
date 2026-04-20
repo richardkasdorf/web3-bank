@@ -12,13 +12,13 @@ router = APIRouter(
 )
 
 
-@router.patch("/update_password/{id_conta}", response_model = ContaRead)
+@router.patch("/update_password")
 def patch_account(password_data: UpdatePassword, db: Session = Depends(get_db), current_user: Account = Depends(get_current_user)):
     
-    db_account = crud.update_password(db, id_conta = current_user.id_conta, password_data = password_data)
+    db_account = crud.update_password(db, user_id = current_user.user_id, password_data = password_data)
     if db_account is None:
-        raise HTTPException(status_code=404, detail = "Conta não encontrada")
-    return db_account
+        raise HTTPException(status_code=404, detail = "Account not found")
+    return {"message": "Password update is complete!"}
 
 
 
