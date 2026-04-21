@@ -20,8 +20,7 @@ class ContaRead(BaseModel):
 class UpdatePassword(BaseModel):
     password: str
 
-class InternalTransferRequest(BaseModel):
-    from_account_id: int  
+class InternalTransferRequest(BaseModel): 
     to_account_id: int    
     amount: Decimal
 
