@@ -48,6 +48,13 @@ ERC20_ABI = [
         "name": "transfer",
         "outputs": [{"name": "", "type": "bool"}],
         "type": "function"
+    },
+    {
+        "constant": True,
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [{"name": "", "type": "uint8"}],
+        "type": "function"
     }
 ]
 
@@ -57,7 +64,7 @@ usdc_contract = w3.eth.contract(address=USDC_CONTRACT, abi=ERC20_ABI)
 
 def transfer_usdc(to_address: str, amount: Decimal) -> str:
     if not w3.is_address(to_address):
-        raise ValueError(f"Endereço inválido: {to_address}")
+        raise ValueError(f"Invalid address: {to_address}")
 
     private_key = get_private_key_from_vault()
     bank_address = w3.eth.account.from_key(private_key).address
@@ -76,11 +83,14 @@ def transfer_usdc(to_address: str, amount: Decimal) -> str:
 
         signed_tx = w3.eth.account.sign_transaction(tx, private_key)
         tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
+        receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+        if receipt['status'] == 0:
+            raise Exception(f"Blockchain transsacion error. Hash: {w3.to_hex(tx_hash)}")
 
         return w3.to_hex(tx_hash)
 
     except Exception as e:
-        raise Exception(f"Erro ao transferir USDC: {str(e)}")
+        raise Exception(f"Transfer error: {str(e)}")
 
 def get_bank_address() -> str:
     pk = get_private_key_from_vault()

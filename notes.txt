@@ -8,6 +8,10 @@ http://localhost:8000/docs
 cd "/mnt/c/Users/richa/OneDrive/Área de Trabalho/C++/Estudos_Python"
 docker compose up -d "services"
 
+docker exec -e VAULT_TOKEN="root_token_estudo" -it bank_vault vault kv put secret/config secretkey="seu_valor"
+
+
+
 ToDo:
 
 Audit & Log System
