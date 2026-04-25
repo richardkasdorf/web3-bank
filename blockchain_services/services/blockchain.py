@@ -1,6 +1,5 @@
 # blockchain_services/services/blockchain.py
-import os
-import hvac
+import os, hvac
 from decimal import Decimal
 from dotenv import load_dotenv
 from web3 import Web3
@@ -16,10 +15,11 @@ def get_private_key_from_vault():
     client = hvac.Client(url=VAULT_URL, token=VAULT_TOKEN)
     try:
         read_response = client.secrets.kv.v2.read_secret_version(
-            mount_point='secret', 
-            path='bank-secrets'
+            path='config'
         )
-        return read_response['data']['data']['private_key']
+        secrets = read_response['data']['data']
+        return secrets
+    
     except Exception as e:
         raise Exception(f"❌ Vault access error: {str(e)}")
 
@@ -27,6 +27,7 @@ def get_private_key_from_vault():
 # ====================== Blockchain Connection ======================
 SEPOLIA_RPC = os.getenv("SEPOLIA_RPC")
 USDC_CONTRACT = os.getenv("USDC_CONTRACT")
+PUBLIC_ADDRESS = os.getenv("PUBLIC_ADDRESS")
 
 if not all([SEPOLIA_RPC, USDC_CONTRACT]):
     raise Exception("❌ Ambient variables missing (SEPOLIA_RPC or USDC_CONTRACT)")
@@ -60,7 +61,7 @@ ERC20_ABI = [
 
 usdc_contract = w3.eth.contract(address=USDC_CONTRACT, abi=ERC20_ABI)
 
-# ====================== Funções de Serviço ======================
+# ====================== Services ======================
 
 def transfer_usdc(to_address: str, amount: Decimal) -> str:
     if not w3.is_address(to_address):
@@ -92,9 +93,33 @@ def transfer_usdc(to_address: str, amount: Decimal) -> str:
     except Exception as e:
         raise Exception(f"Transfer error: {str(e)}")
 
-def get_bank_address() -> str:
-    pk = get_private_key_from_vault()
-    return w3.eth.account.from_key(pk).address
+
+
+''' python -c "import blockchain; blockchain.get_bank_balance()" '''
+def get_bank_balance():
+    if w3.is_connected():
+        print("✅ Online on Sepolia!")
+    else:
+        print("❌ Connection fail.")
+
+    decimais = usdc_contract.functions.decimals().call()
+    usdc_balance = usdc_contract.functions.balanceOf(PUBLIC_ADDRESS).call()
+    real_balance = usdc_balance / (10 ** decimais)
+    print(f"Balance: {usdc_balance}")
+    print(f"Decimals: {decimais}")
+    print(f"Real Balance: {real_balance} USDC")
+
+''' python -c "import blockchain; blockchain.get_eth_balance()" '''
+def get_eth_balance():
+    if not w3.is_connected():
+        print("❌ Conection fail.")
+        return
+    balance_wei = w3.eth.get_balance(PUBLIC_ADDRESS)
+    balance_eth = w3.from_wei(balance_wei, 'ether')
+    print(f"Wei balance: {balance_wei}")
+    print(f"Real balance: {balance_eth} ETH")
+    return balance_eth
+
 
 
 
