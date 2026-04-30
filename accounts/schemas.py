@@ -24,7 +24,9 @@ class InternalTransferRequest(BaseModel):
     to_account_id: int    
     amount: Decimal
 
-
+class ExternalTransferRequest(BaseModel):
+    external_to_address: str
+    amount: Decimal
 
 
 

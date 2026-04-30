@@ -1,9 +1,8 @@
 from fastapi import FastAPI, Depends
 from accounts.routes import account_routers
-from blockchain_services.routes.route_withdraw import router as withdraw_router
+from blockchain_services.routes.route_blockchain_transfer import router as external_transfer
 from dotenv import load_dotenv
 from db.database import engine, Base
-from accounts.models import User, Account, TransactionLedger 
 
 Base.metadata.create_all(bind=engine)
 
@@ -21,7 +20,7 @@ for router in account_routers:
     app.include_router(router)
 
 # Blockchain Route - Withdraw USDC
-app.include_router(withdraw_router, prefix="/api")
+app.include_router(external_transfer, prefix="/external_transfer")
 
 
 

@@ -5,6 +5,8 @@ https://scs.owasp.org/sctop10/SC01-AccessControlVulnerabilities/#description
 
 http://localhost:8080/
 http://localhost:8000/docs
+
+pwd
 cd "/mnt/c/Users/richa/OneDrive/Área de Trabalho/C++/Estudos_Python"
 docker compose up -d "services"
 
