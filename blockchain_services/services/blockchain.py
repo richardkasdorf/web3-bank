@@ -18,7 +18,9 @@ def get_private_key_from_vault():
             path='config'
         )
         secrets = read_response['data']['data']
+        print(secrets)
         return secrets['secretkey']
+        
     
     except Exception as e:
         raise Exception(f"❌ Vault access error: {str(e)}")
@@ -88,7 +90,7 @@ def get_eth_balance():
     return balance_eth
 
 ''' python -c "import blockchain; blockchain.get_bank_balance_test()" '''
-def get_bank_balance_test():
+def get_account_balance_test():
     if w3.is_connected():
         print("✅ Online on Sepolia!")
     else:
