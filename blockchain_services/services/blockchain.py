@@ -18,7 +18,7 @@ def get_private_key_from_vault():
             path='config'
         )
         secrets = read_response['data']['data']
-        print(secrets)
+        print(secrets)                  # TEST ONLY. REMOVE LATER
         return secrets['secretkey']
         
     

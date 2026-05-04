@@ -1,5 +1,5 @@
 from db.database import Base
-from sqlalchemy import Column, String, Float, Integer, Numeric, ForeignKey, DateTime
+from sqlalchemy import Column, String, Float, Integer, Numeric, ForeignKey, DateTime, LargeBinary 
 from typing import Optional
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -36,4 +36,9 @@ class TransactionLedger(Base):
     external_to_address = Column(String, nullable=True)
 
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class Bank(Base):
+    __tablename__ = "bank"
+    id = Column(Integer, primary_key=True, index=True)
+    bank_assign_key = Column(LargeBinary)
 
