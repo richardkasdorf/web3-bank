@@ -8,15 +8,14 @@ from db.database import get_db
 
 router = APIRouter()
 
-
-@router.post("/transfer/external", status_code=status.HTTP_201_CREATED)
+@router.post("/transfer/external", status_code = status.HTTP_201_CREATED)
 async def external_transfer(request: ExternalTransferRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
 
     source_account = db.query(Account).filter(Account.user_id == current_user.id).first()
     if not source_account: raise HTTPException(status_code = 403, detail = "You have no permission or account does not exists.")
 
     if source_account.balance < request.amount:
-        raise HTTPException(status_code=400, detail="Insufficient internal balance.")
+        raise HTTPException(status_code = 400, detail = "Insufficient internal balance.")
 
     try:
         tx_hash = transfer_usdc(
@@ -33,9 +32,7 @@ async def external_transfer(request: ExternalTransferRequest, current_user: User
         }
 
     except ValueError as ve:
-        raise HTTPException(status_code=400, detail=str(ve))
+        raise HTTPException(status_code = 400, detail = str(ve))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Blockchain error: {str(e)}")
-
-
+        raise HTTPException(status_code = 500, detail = f"Blockchain error: {str(e)}")
 

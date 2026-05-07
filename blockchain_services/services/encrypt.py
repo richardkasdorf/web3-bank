@@ -2,8 +2,6 @@ import os
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from dotenv import load_dotenv
 from accounts.models import Bank
-from db.database import engine, Base
-
 from db.database import SessionLocal
 
 load_dotenv()
@@ -28,7 +26,6 @@ def encrypt_data():
             new_bank_entry = Bank(bank_assign_key=blob_final)
             db.add(new_bank_entry)
             db.commit()
-            print("Success!")
         except Exception as e:
             db.rollback() 
             print(f"Error: {e}")

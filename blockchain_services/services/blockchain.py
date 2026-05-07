@@ -7,25 +7,6 @@ from web3.middleware import ExtraDataToPOAMiddleware
 
 load_dotenv()
 
-# ====================== Vault Config ======================
-VAULT_URL = os.getenv("VAULT_URL", "http://localhost:8200")
-VAULT_TOKEN = os.getenv("VAULT_TOKEN", "root_token_estudo")
-
-def get_private_key_from_vault():
-    client = hvac.Client(url=VAULT_URL, token=VAULT_TOKEN)
-    try:
-        read_response = client.secrets.kv.v2.read_secret_version(
-            path='config'
-        )
-        secrets = read_response['data']['data']
-        print(secrets)                  # TEST ONLY. REMOVE LATER
-        return secrets['secretkey']
-        
-    
-    except Exception as e:
-        raise Exception(f"❌ Vault access error: {str(e)}")
-
-
 # ====================== Blockchain Connection ======================
 SEPOLIA_RPC = os.getenv("SEPOLIA_RPC")
 USDC_CONTRACT = os.getenv("USDC_CONTRACT")
