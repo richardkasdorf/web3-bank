@@ -18,6 +18,7 @@ def get_master_key_from_vault():
             raise_on_deleted_version = True 
         )
         secrets = read_response['data']['data']
+        print(secrets)
         return secrets['secretkey']
         
     except Exception as e:
@@ -48,6 +49,7 @@ def decrypt_data():
         decrypted_key = aesgcm.decrypt(nonce, ciphertext, None)
         private_key = "0x" + decrypted_key.decode().strip()
 
+        print(private_key)
         return private_key
 
     except Exception as e:
