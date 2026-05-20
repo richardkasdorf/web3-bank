@@ -1,6 +1,5 @@
 from db.database import Base
 from sqlalchemy import Column, String, Float, Integer, Numeric, ForeignKey, DateTime, LargeBinary 
-from typing import Optional
 from sqlalchemy.orm import relationship
 from datetime import datetime
 

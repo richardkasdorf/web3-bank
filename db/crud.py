@@ -1,12 +1,11 @@
-import random
+import random, os
 from sqlalchemy.orm import Session
 from accounts.models import Account, User, TransactionLedger
 from accounts.auth_model import get_password_hash
 from accounts.schemas import CreateAccount, UpdateAccount, UpdatePassword
 from fastapi import HTTPException, status
-import os
 from decimal import Decimal
-
+#from eth_account import Account as EthAccount
 
 
 def get_all_accounts(db: Session):
@@ -27,16 +26,16 @@ def create_user_with_account(db: Session, user: CreateAccount):
     existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="E-mail already exists."
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail = "E-mail already exists."
         )
 
-    db_user = User(id=unique_id, full_name=user.full_name, email=user.email, hashed_password=hashed_password)
+    db_user = User(id = unique_id, full_name = user.full_name, email = user.email, hashed_password = hashed_password)
     db.add(db_user)
 
     db.flush()
 
-    new_account = Account(user_id=db_user.id, balance=0.0, wallet_address=f"0x{os.urandom(20).hex()}")
+    new_account = Account(user_id = db_user.id, balance = 0.0, wallet_address = f"0x{os.urandom(20).hex()}")
     db.add(new_account)
 
     try:
@@ -45,7 +44,7 @@ def create_user_with_account(db: Session, user: CreateAccount):
         return db_user
     except Exception as e:
         db.rollback()
-        raise e
+        raise HTTPException(status_code=500, detail=f"Erro interno: {str(e)}")
 
 def update_account(db: Session, user_id: int, update: dict):
     db_user = db.query(User).filter(User.id == user_id).first()
@@ -116,8 +115,8 @@ def internal_transfer(db: Session, from_user_id: int, to_user_id: int, amount: D
 
 ## Blockchain Use
 
-def get_account_by_id(db: Session, id_conta: str):
-    db_account = db.query(Account).filter(Account.id_conta == id_conta).first()
+def get_account_by_id(db: Session, user_id: str):
+    db_account = db.query(Account).filter(Account.user_id == user_id).first()
     return db_account
 
 ## ----------------------------------------- ##
