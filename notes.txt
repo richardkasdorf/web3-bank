@@ -11,7 +11,7 @@ docker ps
 cd "/mnt/c/Users/richa/OneDrive/Área de Trabalho/C++/Estudos_Python"
 docker compose up -d / "services"
 
-
+docker compose logs
 
 docker exec bank_api python -c "from blockchain_services.services.decrypt import get_master_key_from_vault; get_master_key_from_vault()"
 docker exec bank_api python -c "from blockchain_services.services.decrypt import decrypt_data; decrypt_data()"

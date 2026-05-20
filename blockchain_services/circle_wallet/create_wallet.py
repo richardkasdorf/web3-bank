@@ -26,7 +26,7 @@ try:
     wallet = wallets_api.create_wallet(
         developer_controlled_wallets.CreateWalletRequest.from_dict({
             "walletSetId": wallet_set.data.wallet_set.actual_instance.id,
-            "blockchains": ["ARC-TESTNET"],
+            "blockchains": ["ETH-SEPOLIA"],
             "count": 1,
             "accountType": "EOA"
         })
@@ -39,6 +39,39 @@ except developer_controlled_wallets.ApiException as e:
 
 
 '''
+{
+  "data": {
+    "wallet_set": {
+      "id": "7f74d18a-6ae6-5896-b0b1-ef68cfd3a34e",
+      "create_date": "2026-05-17T23:01:30Z",
+      "update_date": "2026-05-17T23:01:30Z",
+      "custody_type": "DEVELOPER"
+    }
+  }
+}
+{
+  "data": {
+    "wallets": [
+      {
+        "id": "d757f526-0f21-5736-bf02-b396884db8ef",
+        "address": "0x8798d3a6997ccd6650b89131bac03c8aefa624e2",
+        "blockchain": "ETH-SEPOLIA",
+        "create_date": "2026-05-17T23:01:30Z",
+        "update_date": "2026-05-17T23:01:30Z",
+        "custody_type": "DEVELOPER",
+        "name": null,
+        "ref_id": null,
+        "state": "LIVE",
+        "user_id": null,
+        "wallet_set_id": "7f74d18a-6ae6-5896-b0b1-ef68cfd3a34e",
+        "initial_public_key": null,
+        "account_type": "EOA"
+      }
+    ]
+  }
+}
+
+
 {
   "data": {
     "wallet_set": {

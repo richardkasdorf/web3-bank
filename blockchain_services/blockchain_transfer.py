@@ -15,11 +15,11 @@ SEPOLIA_RPC = os.getenv("SEPOLIA_RPC")
 USDC_CONTRACT = os.getenv("USDC_CONTRACT")
 
 w3 = Web3(Web3.HTTPProvider(SEPOLIA_RPC))
-usdc_contract = w3.eth.contract(address=USDC_CONTRACT, abi=ERC20_ABI)
+usdc_contract = w3.eth.contract(address=Web3.to_checksum_address(USDC_CONTRACT), abi=ERC20_ABI)
 
 def transfer_usdc(db: Session, external_to_address: str, external_from_address: str, amount: Decimal) -> str:
 
-    account = db.query(Account).filter(Account.id == external_from_address).first()
+    account = db.query(Account).filter(Account.wallet_address == external_from_address).first()
 
     if not account:
         raise ValueError("Account not found.")
@@ -35,9 +35,7 @@ def transfer_usdc(db: Session, external_to_address: str, external_from_address: 
     try:
 
         nonce = w3.eth.get_transaction_count(bank_address)
-        print(f"DEBUG PK: {private_key}")
-        print(f"DEBUG TO: {repr(external_to_address)}")
-        print(f"DEBUG AMOUNT: {amount_wei}")
+        
         tx = usdc_contract.functions.transfer(external_to_address, amount_wei).build_transaction({
             'chainId': 11155111,
             'gas': 120000,

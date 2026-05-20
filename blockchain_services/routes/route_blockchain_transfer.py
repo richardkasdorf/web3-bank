@@ -20,7 +20,7 @@ async def external_transfer(request: ExternalTransferRequest, current_user: User
     try:
         tx_hash = transfer_usdc(
             db,
-            external_from_address = source_account.id,
+            external_from_address = source_account.wallet_address,
             external_to_address = request.external_to_address, 
             amount = request.amount
         )
