@@ -8,7 +8,15 @@ class Account(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), unique=True)
     balance = Column(Numeric(precision=20, scale=6), default=0.0)
+
     wallet_address = Column(String, unique=True)
+    circle_wallet_id = Column(String, unique=True, index=True, nullable=True)
+    circle_wallet_set_id = Column(String, index=True, nullable=True)
+    blockchain = Column(String, default="ETH-SEPOLIA")
+    account_type = Column(String, default="EOA")
+    custody_type = Column(String, default="DEVELOPER")
+    circle_create_date = Column(DateTime, nullable=True)
+    
     owner = relationship("User", back_populates="account")
     transactions_from = relationship("TransactionLedger", foreign_keys="[TransactionLedger.from_account_id]")
     transactions_to = relationship("TransactionLedger", foreign_keys="[TransactionLedger.to_account_id]")
@@ -40,4 +48,5 @@ class Bank(Base):
     __tablename__ = "bank"
     id = Column(Integer, primary_key=True, index=True)
     bank_assign_key = Column(LargeBinary)
+
 

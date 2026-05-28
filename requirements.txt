@@ -17,6 +17,5 @@ slowapi==0.1.9
 sentry-sdk==2.54.0
 pwdlib[argon2]
 psycopg2-binary
-
-
+circle-developer-controlled-wallets
 

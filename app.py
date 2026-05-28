@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from accounts.routes import account_routers
-from blockchain_services.routes.route_blockchain_transfer import router as external_transfer
 from dotenv import load_dotenv
 from db.database import engine, Base
+from blockchain_services.routes.route_circle_listener import router as webhooks_router
+from blockchain_services.routes.route_blockchain_transfer import router as blockchain_transfer
 
 Base.metadata.create_all(bind=engine)
 
@@ -14,14 +15,14 @@ app = FastAPI(
     version="1.0.0"
 )
 
-
 # Internal Route - Bank Operation
 for router in account_routers:
     app.include_router(router)
 
 # Blockchain Route - Withdraw USDC
-app.include_router(external_transfer, prefix="/external_transfer")
+app.include_router(blockchain_transfer)
 
-
+# Blockchain Route - Circle Listener
+app.include_router(webhooks_router)
 
 

@@ -1,16 +1,47 @@
-import os
-from decimal import Decimal
 from blockchain_services.services.decrypt import decrypt_data
-from blockchain_services.services.blockchain import ERC20_ABI
 from dotenv import load_dotenv
-from web3 import Web3
 from sqlalchemy.orm import Session
-from accounts.models import TransactionLedger, Account
+from accounts.models import Account
+from fastapi import HTTPException
 
 load_dotenv()
 
-# ====================== Services ======================
+#Singleton ou um Cache LRU para a MASTER_KEY
 
+def resolve_destination(destination: str, db: Session) -> str:
+
+    destination = destination.strip()
+    
+    if destination.startswith("0x"):
+        if len(destination) != 42:
+            raise HTTPException(status_code=400, detail="❌ Invalid wallet address.")
+        return destination
+        
+    if destination.isdigit() and len(destination) == 6:
+        account_destination = db.query(Account).filter(Account.user_id == int(destination)).first()
+        if not account_destination:
+            raise HTTPException(
+                status_code=404, 
+                detail= f"❌ Account '{destination}' not found."
+            )
+        return account_destination.wallet_address
+        
+    raise HTTPException(
+        status_code=400, 
+        detail="❌ Invalid destination. Enter a 6-digit account number or an address starting with 0x."
+    )
+
+
+
+
+
+
+
+
+
+
+# ====================== Services ======================
+'''
 SEPOLIA_RPC = os.getenv("SEPOLIA_RPC")
 USDC_CONTRACT = os.getenv("USDC_CONTRACT")
 
@@ -72,7 +103,9 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Decrypt error: {e}")
 
-#Singleton ou um Cache LRU para a MASTER_KEY
+'''
+
+
 
 
 

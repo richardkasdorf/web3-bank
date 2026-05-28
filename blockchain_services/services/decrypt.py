@@ -18,7 +18,6 @@ def get_master_key_from_vault():
             raise_on_deleted_version = True 
         )
         secrets = read_response['data']['data']
-        print(secrets)
         return secrets['secretkey']
         
     except Exception as e:
