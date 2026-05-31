@@ -1,7 +1,7 @@
 from fastapi import Depends, status, APIRouter, HTTPException
 from accounts.auth_model import get_current_user 
 from accounts.schemas import TransferRequest
-from accounts.models import Account
+from accounts.models import Account, User
 from sqlalchemy.orm import Session
 from db.database import get_db
 from circle.web3 import utils, developer_controlled_wallets
@@ -14,8 +14,11 @@ router = APIRouter(prefix="/Transactions", tags=["Transfer"])
 
 
 @router.post("/transfer", status_code=status.HTTP_201_CREATED)
-async def initiate_transfer(payload: TransferRequest, db: Session = Depends(get_db)):
-    source_account = db.query(Account).filter(Account.user_id == payload.from_user_id).first()
+async def initiate_transfer(payload: TransferRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+
+    source_account = db.query(Account).filter(Account.user_id == current_user.id).first()
+
+    #source_account = db.query(Account).filter(Account.user_id == payload.from_user_id).first()
     if not source_account:
         raise HTTPException(status_code=404, detail="❌ Account not found.")
         
