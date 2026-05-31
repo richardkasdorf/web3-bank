@@ -46,7 +46,7 @@ def decrypt_data():
         ciphertext = blob[12:]
 
         decrypted_key = aesgcm.decrypt(nonce, ciphertext, None)
-        private_key = "0x" + decrypted_key.decode().strip()
+        private_key = decrypted_key.decode().strip()
 
         print(private_key)
         return private_key

@@ -21,7 +21,7 @@ docker exec bank_api python -c "from blockchain_services.services.encrypt import
 
 docker exec -e VAULT_TOKEN="root_token_estudo" -it bank_vault vault kv put secret/config secretkey="seu_valor"
 
-docker compose logs -f api
+
 
 
 http://127.0.0.1:4040/inspect/http

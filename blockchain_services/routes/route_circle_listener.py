@@ -8,7 +8,7 @@ from datetime import datetime
 
 
 logger = logging.getLogger("uvicorn")
-router = APIRouter(prefix="/circle", tags=["Webhook"])
+router = APIRouter(tags=["Webhook"])
 
 @router.post("/webhooks/circle", status_code=status.HTTP_200_OK)
 async def circle_webhook(request: Request, db: Session = Depends(get_db)):

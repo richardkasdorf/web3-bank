@@ -8,6 +8,7 @@ from circle.web3 import utils, developer_controlled_wallets
 from decimal import Decimal
 from blockchain_services.blockchain_transfer import resolve_destination
 import os
+from blockchain_services.services.decrypt import decrypt_data
 
 router = APIRouter(prefix="/Transactions", tags=["Transfer"])
 
@@ -20,12 +21,14 @@ async def initiate_transfer(payload: TransferRequest, db: Session = Depends(get_
         
     if source_account.balance < Decimal(str(payload.amount)):
         raise HTTPException(status_code=400, detail="❌ Insuficient balance.")
-        
-    resolved_destination_address = resolve_destination(payload.destination, db)
     
+    resolved_destination_address = resolve_destination(payload.destination, db)
+
+    hex_encoded = decrypt_data()
+
     client = utils.init_developer_controlled_wallets_client(
         api_key=os.getenv("CIRCLE_API_KEY"),
-        entity_secret=os.getenv("HEX_ENCODED_ENTITY_SECRET")
+        entity_secret=hex_encoded
     )
     transactions_api = developer_controlled_wallets.TransactionsApi(client)
 

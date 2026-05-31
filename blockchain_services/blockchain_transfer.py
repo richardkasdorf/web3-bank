@@ -1,4 +1,3 @@
-from blockchain_services.services.decrypt import decrypt_data
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from accounts.models import Account

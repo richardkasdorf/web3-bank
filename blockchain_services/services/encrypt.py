@@ -7,7 +7,7 @@ from db.database import SessionLocal
 load_dotenv()
 
 MASTER_KEY = os.getenv('MASTER_KEY')
-BANK_PRIVATE_KEY = os.getenv('BANK_PRIVATE_KEY') 
+HEX_ENCODED_ENTITY_SECRET = os.getenv('HEX_ENCODED_ENTITY_SECRET') 
 
 def encrypt_data():
 
@@ -20,7 +20,7 @@ def encrypt_data():
             aesgcm = AESGCM(key)
             nonce = os.urandom(12)
             
-            ct = aesgcm.encrypt(nonce, BANK_PRIVATE_KEY.encode(), None)
+            ct = aesgcm.encrypt(nonce, HEX_ENCODED_ENTITY_SECRET.encode(), None)
             blob_final = nonce + ct
 
             new_bank_entry = Bank(bank_assign_key=blob_final)
