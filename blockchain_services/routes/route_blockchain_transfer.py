@@ -9,8 +9,9 @@ from decimal import Decimal
 from blockchain_services.blockchain_transfer import resolve_destination
 import os
 from blockchain_services.services.decrypt import decrypt_data
+from dotenv import load_dotenv
 
-router = APIRouter(prefix="/Transactions", tags=["Transfer"])
+router = APIRouter(prefix="/transactions", tags=["transfer"])
 
 
 @router.post("/transfer", status_code=status.HTTP_201_CREATED)
@@ -18,7 +19,6 @@ async def initiate_transfer(payload: TransferRequest, db: Session = Depends(get_
 
     source_account = db.query(Account).filter(Account.user_id == current_user.id).first()
 
-    #source_account = db.query(Account).filter(Account.user_id == payload.from_user_id).first()
     if not source_account:
         raise HTTPException(status_code=404, detail="❌ Account not found.")
         

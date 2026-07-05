@@ -21,11 +21,11 @@ services:
       - "8000:8000"
     depends_on:
       - vault
-      - db
+      #- db
     environment:
       - VAULT_URL=http://vault:8200
       - VAULT_TOKEN=root_token_estudo
-      - DATABASE_URL=postgresql://user_admin:password_123@db:5432/bank_digital 
+      #- DATABASE_URL=postgresql://user_admin:password_123@db:5432/bank_digital 
       - CIRCLE_API_KEY=${CIRCLE_API_KEY}
       - HEX_ENCODED_ENTITY_SECRET=${HEX_ENCODED_ENTITY_SECRET}
     working_dir: /app

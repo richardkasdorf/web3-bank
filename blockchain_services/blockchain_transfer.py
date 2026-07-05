@@ -1,9 +1,7 @@
-from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from accounts.models import Account
 from fastapi import HTTPException
 
-load_dotenv()
 
 #Singleton ou um Cache LRU para a MASTER_KEY
 
