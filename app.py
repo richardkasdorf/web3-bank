@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 from db.database import engine, Base
 from blockchain_services.routes.route_circle_listener import router as webhooks_router
 from blockchain_services.routes.route_blockchain_transfer import router as blockchain_transfer
+from chatbot.route_chatbot import router as chatbot_router
 from fastapi.middleware.cors import CORSMiddleware
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -32,7 +34,6 @@ app.add_middleware(
     allow_headers=["*"],            # Permit all headers (Authorization Bearer included)
 )
 
-
 # Internal Route - Bank Operation
 for router in account_routers:
     app.include_router(router)
@@ -43,4 +44,6 @@ app.include_router(blockchain_transfer)
 # Blockchain Route - Circle Listener
 app.include_router(webhooks_router)
 
+# ChatBot
+app.include_router(chatbot_router)
 

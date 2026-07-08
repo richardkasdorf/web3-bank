@@ -36,17 +36,34 @@ async def circle_webhook(request: Request, db: Session = Depends(get_db)):
     amounts_list = notification.get("amounts", [])
     if not amounts_list:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="🔄️ No value found")
+
+
+
+
+
+
+
+
+
+
+    amount_value = Decimal(str(amounts_list[0]))
     
-    try:
-        raw_amount = str(amounts_list[0]) if isinstance(amounts_list, list) else str(amounts_list)
-        if "." not in raw_amount:
-            amount_value = Decimal(raw_amount) / Decimal("1000000")
-        else:
-            amount_value = Decimal(raw_amount)
-    except Exception as parse_err:
-        logger.error(f"❌ Error parsing amount {amounts_list}: {str(parse_err)}")
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid amount format")
+    account = db.query(Account).filter(Account.circle_wallet_id == circle_wallet_id).first()
+    if not account:
+        logger.warning(f"⚠️ Wallet {circle_wallet_id} not found.")
+        return {"status": "error", "message": "❌ Account does not exsist"}
     
+
+
+
+
+
+
+
+
+
+
+
     max_retries = 3
     retry_delay = 3
 
