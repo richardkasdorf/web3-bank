@@ -16,6 +16,19 @@ class UpdatePassword(BaseModel):
 class UpdateAccount(BaseModel):
     email: EmailStr
 
+class TransactionRead(BaseModel):
+    id: int
+    amount: Decimal
+    type: str
+    tx_hash: Optional[str] = None
+    from_account_id: Optional[int] = None
+    to_account_id: Optional[int] = None
+    external_from_address: Optional[str] = None
+    external_to_address: Optional[str] = None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
 class CircleWalletData(BaseModel):
     wallet_id: UUID = Field(..., alias="id", description="Circle unic ID")
     wallet_set_id: UUID = Field(..., description="wallet_set ID")
@@ -43,7 +56,7 @@ class ContaRead(BaseModel):
     
 
 class TransferRequest(BaseModel):
-    from_user_id: int = Field(..., description="ID de quem está enviando (6 dígitos)")
+    #from_user_id: int = Field(..., description="ID de quem está enviando (6 dígitos)")
     destination: str = Field(..., description="Digite o número da conta (6 dígitos) OU o endereço da Wallet (0x...)")
     amount: float = Field(..., description="Valor em USDC a ser transferido")
 

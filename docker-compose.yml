@@ -21,13 +21,14 @@ services:
       - "8000:8000"
     depends_on:
       - vault
-      - db
+      #- db
     environment:
       - VAULT_URL=http://vault:8200
       - VAULT_TOKEN=root_token_estudo
-      - DATABASE_URL=postgresql://user_admin:password_123@db:5432/bank_digital 
+      #- DATABASE_URL=postgresql://user_admin:password_123@db:5432/bank_digital 
       - CIRCLE_API_KEY=${CIRCLE_API_KEY}
       - HEX_ENCODED_ENTITY_SECRET=${HEX_ENCODED_ENTITY_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     working_dir: /app
     volumes:
       - .:/app
@@ -52,8 +53,22 @@ services:
     ports:
       - 8080:8080
 
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: always
+    command:
+      - "http"
+      - "api:8000" # Aponta direto para o nome do seu serviço FastAPI
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_TOKEN}
+    depends_on:
+      - api
+
+
 volumes:
   bank_data:
+
+
 
 
 

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from accounts.models import Account, User
+from accounts.models import User
 from fastapi import Depends, HTTPException, status
 from db.database import get_db
 from sqlalchemy.orm import Session
