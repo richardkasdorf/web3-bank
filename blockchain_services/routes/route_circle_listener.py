@@ -37,32 +37,12 @@ async def circle_webhook(request: Request, db: Session = Depends(get_db)):
     if not amounts_list:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="🔄️ No value found")
 
-
-
-
-
-
-
-
-
-
     amount_value = Decimal(str(amounts_list[0]))
     
     account = db.query(Account).filter(Account.circle_wallet_id == circle_wallet_id).first()
     if not account:
         logger.warning(f"⚠️ Wallet {circle_wallet_id} not found.")
         return {"status": "error", "message": "❌ Account does not exsist"}
-    
-
-
-
-
-
-
-
-
-
-
 
     max_retries = 3
     retry_delay = 3
