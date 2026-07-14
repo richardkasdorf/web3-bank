@@ -1,66 +1,56 @@
-# Base de Conhecimento
+# Knowledge Base
 
-## Dados Utilizados
+## Data Used
 
-Descreva se usou os arquivos da pasta `data`, por exemplo:
+Describe if you used the files from the `data` folder, for example:
 
-| Arquivo | Formato | Utilização no Agente |
+| File | Format | Use in the Agent |
 |---------|---------|---------------------|
-| `history_chat.csv` | CSV | Contextualizar interações anteriores |
-| `risk_profile.json` | JSON | Personalizar recomendações avaliando o perfil |
-| `invest_options.json` | JSON | Sugerir produtos adequados ao perfil |
-| `transactions.csv` | CSV | Analisar padrão de gastos do cliente |
+| `history_chat.csv` | CSV | Contextualize previous interactions |
+| `risk_profile.json` | JSON | Personalize recommendations by assessing the profile |
+| `invest_options.json` | JSON | Suggest products suited to the profile |
+| `transactions.csv` | CSV | Analyze the customer's spending patterns |
 
 > [!TIP]
-> **Quer um dataset mais robusto?** Você pode utilizar datasets públicos do [Hugging Face](https://huggingface.co/datasets) relacionados a finanças, desde que sejam adequados ao contexto do desafio.
+> **Want a more robust dataset?** You can use public datasets from [Hugging Face](https://huggingface.co) related to finance, as long as they are suitable for the challenge context.
 
 ---
 
-## Adaptações nos Dados
+## Data Adaptations
 
-Inicialmente será oferecido uma remuneração baseado na taxa de juros dos Estados Unidos, apenas por manter em conta uma quantia mínima de 1.00 USDC. Necessário aceitar os termos e condições para que comece a render.
+Initially, a yield based on the United States interest rate will be offered, simply for maintaining a minimum amount of 1.00 USDC in the account. It is required to accept the terms and conditions for it to start generating yields.
 
 ---
 
-## Estratégia de Integração
+## Integration Strategy
 
-### Como os dados são carregados?
+### How is the data loaded?
 
 ```python
 services.py
 ```
 
-### Como os dados são usados no prompt?
+### How is the data used in the prompt?
 
 ```test
-PERFIL DE RISCO:
-Será submetido a um quiz, e o resultado vai direcionar para um perfil conservador, moderado ou arrojado.
+RISK PROFILE:
+Will be submitted to a quiz, and the result will direct to a conservative, moderate, or aggressive profile.
 
-HISTÓRICO DE CHAT:
-Aprimorar a experiência do usuário, com preferências e analises de dados já salvas. Respostas mais rápidas e precisas, sem necessidade de se explicar uma situação por mais de uma vez.
+CHAT HISTORY:
+Improve the user experience with preferences and data analysis already saved. Faster and more accurate answers, without the need to explain a situation more than once.
 
-TRANSAÇÕES DO CLIENTE:
-Será analizado os gastos, usados para análize de crétido, prevenção a fraudes, ofertas direcionadas. Oferecer suporte e dicas pelo chat também.
+CUSTOMER TRANSACTIONS:
+Spending will be analyzed, used for credit analysis, fraud prevention, and targeted offers. Also offer support and tips through the chat.
 
-OPÇÕES DE INVESTIMENTO:
-Oferecer e explicar opções de investimento, recomendando primeiramente as opções compatíveis com o perfil de risco.
+INVESTMENT OPTIONS:
+Offer and explain investment options, primarily recommending options compatible with the risk profile.
 
 ```
 
 ---
 
-## Exemplo de Contexto Montado
-
-> Mostre um exemplo de como os dados são formatados para o agente.
+## Example of Assembled Context
 
 ```
-Dados do Cliente:
-- Nome: João Silva
-- Perfil: Moderado
-- Saldo disponível: R$ 5.000
-
-Últimas transações:
-- 01/11: Supermercado - R$ 450
-- 03/11: Streaming - R$ 55
-...
+NeonDB... In Progress
 ```
