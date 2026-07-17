@@ -1,83 +1,83 @@
-# 🤖 Agente Financeiro Inteligente com IA Generativa
+# 🤖 Intelligent Financial Agent with Generative AI
 
-## Contexto
+## Context
 
-Os assistentes virtuais no setor financeiro estão evoluindo de simples chatbots reativos para **agentes inteligentes e proativos**. Neste desafio, você vai idealizar e prototipar um agente financeiro que utiliza IA Generativa para:
+Virtual assistants in the financial sector are evolving from simple reactive chatbots to **intelligent and proactive agents**. In this challenge, you will conceptualize and prototype a financial agent that uses Generative AI to:
 
-- **Antecipar necessidades** ao invés de apenas responder perguntas
-- **Personalizar** sugestões com base no contexto de cada cliente
-- **Cocriar soluções** financeiras de forma consultiva
-- **Garantir segurança** e confiabilidade nas respostas (anti-alucinação)
+- **Anticipate needs** instead of just answering questions
+- **Personalize** suggestions based on each customer's context
+- **Co-create solutions** financial solutions in a consultative manner
+- **Ensure security** and reliability in responses (anti-hallucination)
 
 > [!TIP]
-> Na pasta [`examples/`](./examples/) você encontra referências de implementação para cada etapa deste desafio.
+> In the [`examples/`](./examples/) folder, you will find implementation references for each step of this challenge.
 
 ---
 
-## O Que Você Deve Entregar
+## What You Must Deliver
 
-### 1. Documentação do Agente
+### 1. Agent Documentation
 
-Defina **o que** seu agente faz e **como** ele funciona:
+Define **what** your agent does and **how** it works:
 
-- **Caso de Uso:** Qual problema financeiro ele resolve? (ex: consultoria de investimentos, planejamento de metas, alertas de gastos)
-- **Persona e Tom de Voz:** Como o agente se comporta e se comunica?
-- **Arquitetura:** Fluxo de dados e integração com a base de conhecimento
-- **Segurança:** Como evitar alucinações e garantir respostas confiáveis?
+- **Use Case:** What financial problem does it solve? (e.g., investment consulting, goal planning, spending alerts)
+- **Persona and Tone of Voice:** How does the agent behave and communicate?
+- **Architecture:** Data flow and integration with the knowledge base
+- **Security:** How to prevent hallucinations and ensure reliable answers?
 
 📄 **Template:** [`docs/01-documentacao-agente.md`](./docs/01-documentacao-agente.md)
 
 ---
 
-### 2. Base de Conhecimento
+### 2. Knowledge Base
 
-Utilize os **dados mockados** disponíveis na pasta [`data/`](./data/) para alimentar seu agente:
+Use the **mock data** available in the [`data/`](./data/) folder to feed your agent:
 
-| Arquivo | Formato | Descrição |
-|---------|---------|-----------|
-| `transacoes.csv` | CSV | Histórico de transações do cliente |
-| `historico_atendimento.csv` | CSV | Histórico de atendimentos anteriores |
-| `perfil_investidor.json` | JSON | Perfil e preferências do cliente |
-| `produtos_financeiros.json` | JSON | Produtos e serviços disponíveis |
+| File | Format | Use in the Agent |
+|---------|---------|---------------------|
+| `history_chat.csv` | CSV | Contextualize previous interactions |
+| `risk_profile.json` | JSON | Personalize recommendations by assessing the profile |
+| `invest_options.json` | JSON | Suggest products suited to the profile |
+| `transactions.csv` | CSV | Analyze the customer's spending patterns |
 
-Você pode adaptar ou expandir esses dados conforme seu caso de uso.
+You can adapt or expand this data according to your use case.
 
 📄 **Template:** [`docs/02-base-conhecimento.md`](./docs/02-base-conhecimento.md)
 
 ---
 
-### 3. Prompts do Agente
+### 3. Agent Prompts
 
-Documente os prompts que definem o comportamento do seu agente:
+Document the prompts that define your agent's behavior:
 
-- **System Prompt:** Instruções gerais de comportamento e restrições
-- **Exemplos de Interação:** Cenários de uso com entrada e saída esperada
-- **Tratamento de Edge Cases:** Como o agente lida com situações limite
+- **System Prompt:** General instructions on behavior and restrictions
+- **Interaction Examples:** Usage scenarios with expected input and output
+- **Edge Cases Handling:** How the agent handles boundary situations
 
 📄 **Template:** [`docs/03-prompts.md`](./docs/03-prompts.md)
 
 ---
 
-### 4. Aplicação Funcional
+### 4. Functional Application
 
-Desenvolva um **protótipo funcional** do seu agente:
+Develop a **functional prototype** of your agent:
 
-- Chatbot interativo (sugestão: Streamlit, Gradio ou similar)
-- Integração com LLM (via API ou modelo local)
-- Conexão com a base de conhecimento
+- Interactive chatbot (suggestion: Streamlit, Gradio, or similar)
+- LLM integration (via API or local model)
+- Connection to the knowledge base
 
-📁 **Pasta:** [`src/`](./src/)
+📁 **Folder:** [`src/`](./src/)
 
 ---
 
-### 5. Avaliação e Métricas
+### 5. Evaluation and Metrics
 
-Descreva como você avalia a qualidade do seu agente:
+Describe how you evaluate the quality of your agent:
 
-**Métricas Sugeridas:**
-- Precisão/assertividade das respostas
-- Taxa de respostas seguras (sem alucinações)
-- Coerência com o perfil do cliente
+**Suggested Metrics:**
+- Accuracy/assertiveness of responses
+- Safe response rate (no hallucinations)
+- Coherence with the customer's profile
 
 📄 **Template:** [`docs/04-metricas.md`](./docs/04-metricas.md)
 
@@ -85,65 +85,57 @@ Descreva como você avalia a qualidade do seu agente:
 
 ### 6. Pitch
 
-Grave um **pitch de 3 minutos** (estilo elevador) apresentando:
+Record a **3-minute pitch** (elevator style) presenting:
 
-- Qual problema seu agente resolve?
-- Como ele funciona na prática?
-- Por que essa solução é inovadora?
+- What problem does your agent solve?
+- How does it work in practice?
+- Why is this solution innovative?
 
 📄 **Template:** [`docs/05-pitch.md`](./docs/05-pitch.md)
 
 ---
 
-## Ferramentas Sugeridas
+## Suggested Tools
 
-Todas as ferramentas abaixo possuem versões gratuitas:
+All the tools below have free versions:
 
-| Categoria | Ferramentas |
+| Category | Tools |
 |-----------|-------------|
 | **LLMs** | [ChatGPT](https://chat.openai.com/), [Copilot](https://copilot.microsoft.com/), [Gemini](https://gemini.google.com/), [Claude](https://claude.ai/), [Ollama](https://ollama.ai/) |
-| **Desenvolvimento** | [Streamlit](https://streamlit.io/), [Gradio](https://www.gradio.app/), [Google Colab](https://colab.research.google.com/) |
-| **Orquestração** | [LangChain](https://www.langchain.com/), [LangFlow](https://www.langflow.org/), [CrewAI](https://www.crewai.com/) |
-| **Diagramas** | [Mermaid](https://mermaid.js.org/), [Draw.io](https://app.diagrams.net/), [Excalidraw](https://excalidraw.com/) |
+| **Development** | [Streamlit](https://streamlit.io/), [Gradio](https://www.gradio.app/), [Google Colab](https://colab.research.google.com/) |
+| **Orchestration** | [LangChain](https://www.langchain.com/), [LangFlow](https://www.langflow.org/), [CrewAI](https://www.crewai.com/) |
+| **Diagrams** | [Mermaid](https://mermaid.js.org/), [Draw.io](https://app.diagrams.net/), [Excalidraw](https://excalidraw.com/) |
 
 ---
 
-## Estrutura do Repositório
+## Repository Structure
+
+
 
 ```
-📁 lab-agente-financeiro/
+📁 Estudos_Python/
 │
-├── 📄 README.md
+├── 📁 docs/                          # Project documentation and datasets
+│   ├── 📄 history_chat.csv           # Chat history database
+│   ├── 📄 invest_options.json        # Investment products data
+│   ├── 📄 knowledge.md               # Base of knowledge definition
+│   ├── 📄 risk_profile.json          # Customer risk assessment profiles
+│   └── 📄 transactions.csv           # Customer transaction records
 │
-├── 📁 data/                          # Dados mockados para o agente
-│   ├── historico_atendimento.csv     # Histórico de atendimentos (CSV)
-│   ├── perfil_investidor.json        # Perfil do cliente (JSON)
-│   ├── produtos_financeiros.json     # Produtos disponíveis (JSON)
-│   └── transacoes.csv                # Histórico de transações (CSV)
-│
-├── 📁 docs/                          # Documentação do projeto
-│   ├── 01-documentacao-agente.md     # Caso de uso e arquitetura
-│   ├── 02-base-conhecimento.md       # Estratégia de dados
-│   ├── 03-prompts.md                 # Engenharia de prompts
-│   ├── 04-metricas.md                # Avaliação e métricas
-│   └── 05-pitch.md                   # Roteiro do pitch
-│
-├── 📁 src/                           # Código da aplicação
-│   └── app.py                        # (exemplo de estrutura)
-│
-├── 📁 assets/                        # Imagens e diagramas
-│   └── ...
-│
-└── 📁 examples/                      # Referências e exemplos
-    └── README.md
+├── 📄 models.py                      # Data models and structures
+├── 📄 README.md                      # Main project documentation
+├── 📄 route_chatbot.py               # Chatbot API routes and endpoints
+├── 📄 services.py                    # Business logic and data loading
+└── 📄 init.py                        # Python package initialization
 ```
+
 
 ---
 
-## Dicas Finais
+## Final Tips
 
-1. **Comece pelo prompt:** Um bom system prompt é a base de um agente eficaz
-2. **Use os dados mockados:** Eles garantem consistência e evitam problemas com dados sensíveis
-3. **Foque na segurança:** No setor financeiro, evitar alucinações é crítico
-4. **Teste cenários reais:** Simule perguntas que um cliente faria de verdade
-5. **Seja direto no pitch:** 3 minutos passam rápido, vá ao ponto
+1. **Start with the prompt:** A good system prompt is the foundation of an effective agent
+2. **Use the mock data:** They ensure consistency and avoid problems with sensitive data
+3. **Focus on security:** In the financial sector, avoiding hallucinations is critical
+4. **Test real scenarios:** Simulate questions that a real customer would ask
+5. **Be direct in the pitch:** 3 minutes go by fast, get straight to the point

@@ -11,7 +11,7 @@ class ChatbotService:
         
         from pathlib import Path
 
-        BASE_DIR = Path("/app/chatbot/docs")
+        BASE_DIR = Path("/app/chatbot/data")
         
         history_path = BASE_DIR / 'history_chat.csv'
         profile_path = BASE_DIR / 'risk_profile.json'
