@@ -1,0 +1,14 @@
+date,description,category,amount,type
+2026-10-01,Salary,income,5000.00,inflow
+2026-10-02,Rent,housing,1200.00,outflow
+2026-10-03,Supermarket,groceries,450.00,outflow
+2026-10-05,Netflix,leisure,55.90,outflow
+2026-10-07,Pharmacy,health,89.00,outflow
+2026-10-10,Restaurant,groceries,120.00,outflow
+2026-10-12,Uber,transportation,45.00,outflow
+2026-10-15,Electricity Bill,housing,180.00,outflow
+2026-10-20,Gym,health,99.00,outflow
+2026-10-25,Fuel,transportation,250.00,outflow
+
+
+

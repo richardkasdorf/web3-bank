@@ -5,9 +5,9 @@ A modular digital banking core system featuring internal instant transfers and *
 The project follows a domain-driven modular architecture for scalability and clean code:
 
 ```text
-project-root/                      
-├── accounts/                       
-│   ├── routes/                     
+📁 project-root/                      
+├── 📁 accounts/                       
+│   ├── 📁 routes/                     
 │   │   ├── __init__.py
 │   │   ├── route_add_accounts.py
 |   |   ├── route_intrabank_transfer.py
@@ -19,19 +19,19 @@ project-root/
 │   ├── auth_model.py               
 │   ├── models.py                   
 │   └── schemas.py                  
-├── blockchain_services/                             
-│   ├── routes/
+├── 📁 blockchain_services/                             
+│   ├── 📁 routes/
 │   │   ├── __init__.py
 │   │   └── route_withdraw.py
-│   └── services/
+│   └── 📁 services/
 │   │   ├── __init__.py
 │   │   └── blockchain.py
-├── chatbot/                             
+├── 📁 chatbot/                             
 │   ├── __init__.py
 │   ├── models.py                     
 │   ├── route_chatbot.py
 │   └── services.py
-├── db/                             
+├── 📁 db/                             
 │   ├── __init__.py
 │   ├── crud.py                     
 │   └── database.py

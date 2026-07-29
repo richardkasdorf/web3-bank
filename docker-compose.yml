@@ -36,6 +36,7 @@ services:
     env_file:
       - .env
 
+
   db:
     image: postgres:15
     container_name: bank_db
