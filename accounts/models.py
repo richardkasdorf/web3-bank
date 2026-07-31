@@ -27,6 +27,7 @@ class User(Base):
     full_name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+    investor_profile = Column(String, unique=True, index=True)
     
     account = relationship("Account", back_populates="owner", uselist=False)
 
