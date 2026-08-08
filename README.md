@@ -5,9 +5,9 @@ A modular digital banking core system featuring internal instant transfers and *
 The project follows a domain-driven modular architecture for scalability and clean code:
 
 ```text
-project-root/                      
-├── accounts/                       
-│   ├── routes/                     
+📁 project-root/                      
+├── 📁 accounts/                       
+│   ├── 📁 routes/                     
 │   │   ├── __init__.py
 │   │   ├── route_add_accounts.py
 |   |   ├── route_intrabank_transfer.py
@@ -19,18 +19,25 @@ project-root/
 │   ├── auth_model.py               
 │   ├── models.py                   
 │   └── schemas.py                  
-├── blockchain_services/                             
-│   ├── routes/
+├── 📁 blockchain_services/                             
+│   ├── 📁 routes/
 │   │   ├── __init__.py
 │   │   └── route_withdraw.py
-│   └── services/
+│   └── 📁 services/
 │   │   ├── __init__.py
 │   │   └── blockchain.py
-├── db/                             
+├── 📁 chatbot/                             
+│   ├── __init__.py
+│   ├── models.py                     
+│   ├── route_chatbot.py
+│   └── services.py
+├── 📁 db/                             
 │   ├── __init__.py
 │   ├── crud.py                     
 │   └── database.py
-├── app.py                          
+├── app.py  
+├── docker-compose.yml
+├── Dockerfile                         
 └── test_blockchain.py
 ```
 
@@ -41,17 +48,30 @@ This project is under active development. Below is the roadmap for upcoming feat
 * **FastAPI:** High-performance web framework.
 * **SQLAlchemy:** Object-Relational Mapping (ORM).
 * **Web3.py:** Ethereum blockchain interaction.
-* **SQLite:** Local database for development.
+* **SQLite:** Local database for development (test only).
 * **Pydantic:** Data validation and settings management.
+* **NeonDB:** Srverless open-source PostgreSQL database.
 
 ## Installation & Setup
 * Clone the repository: ...
 * Install dependencies: pip install -r requirements.txt
 * Environment Variables (.env): Create a .env file in the root directory:
-SEPOLIA_RPC=your_infura_or_alchemy_url
-BANK_PRIVATE_KEY=your_64_char_private_key
-USDC_CONTRACT=0x1c7D4B196Cb0232b3044B3374241B7454231f855
-* Run the API: python -m uvicorn app:app --reload
+```env
+DATABASE_URL=postgresql://user:password@db:5432/bank_db
+CIRCLE_API_KEY=your_circle_key
+OPENAI_API_KEY=your_openai_key
+```
+
+### 2. Start the Project
+Run the following command to start the database and the API:
+
+```bash
+docker-compose up --build
+```
+
+### 3. Access the API
+Open your browser and go to:
+* **API Docs**: `http://localhost:8000/docs` (Swagger UI)
 
 ## Security & Core
 * Security & Password Hashing: Implement BCrypt/Argon2.

@@ -27,5 +27,7 @@ def get_db():
     finally:
         db.close()
 
-
+def get_db_session():
+    """For uses directly, out of Depends from FastAPI."""
+    return SessionLocal()
 

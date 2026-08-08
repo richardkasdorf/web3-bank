@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from chatbot.models import ChatRequest
 from chatbot.services import ChatbotService
+from accounts.models import User
+from accounts.auth_model import get_current_user
 
 
 router = APIRouter(
@@ -11,17 +13,17 @@ router = APIRouter(
 chatbot_service = ChatbotService()
 
 @router.post("/chatbot-text", status_code=status.HTTP_200_OK)
-async def chat_with_gpt(data: ChatRequest):
+async def chatbot_local(request: ChatRequest, current_user: User = Depends(get_current_user)):
 
-    if not data.message.strip():
+    if not request.message.strip():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
             detail="A mensagem não pode estar vazia."
         )
 
     try:
-        bot_reply = chatbot_service.generate_reply(data.message)
-        return {"reply": bot_reply}
+        bot_reply = chatbot_service.generate_reply(current_user.id, request.message)
+        return {"response": bot_reply}
 
     except ValueError as val_err:
         raise HTTPException(
