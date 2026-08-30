@@ -45,7 +45,7 @@ O valor de `<host>` depende de onde o Docker está rodando:
 | Docker nativo dentro do WSL2 (sem Docker Desktop) | IP do gateway Windows visto pelo WSL (`ip route show default` dentro do WSL) — este IP é dinâmico e pode mudar a cada reinício |
 | Ollama rodando em outro container | nome do serviço no `docker-compose.yml` (ex: `ollama`) |
 
-> ⚠️ Se o IP do host mudar após reiniciar o Windows/WSL2, atualize `OLLAMA_URL` no `.env` e recrie o container (`docker compose up -d --build`).
+> ⚠️ Se o IP do host mudar após reiniciar o Windows/WSL2, atualize `OLLAMA_URL` pelo comando `OLLAMA_HOST="<host>:11434"`.
 
 ## Configuração do Ollama (rodando local, fora do Docker)
 
