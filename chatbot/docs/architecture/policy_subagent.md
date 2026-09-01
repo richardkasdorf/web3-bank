@@ -1,4 +1,4 @@
-## 🤖 Arquitetura do Agente (Workflow)
+## 🤖 Arquitetura do Subagente (Workflow)
 
 O ecossistema do chatbot utiliza uma estrutura agêntica baseada em supervisão e RAG (Retrieval-Augmented Generation). Abaixo está o fluxo de tomada de decisão quando uma busca de documentos é invocada:
 

@@ -11,7 +11,7 @@ Frontend (React/TSX)
    ▼
 FastAPI (bank_api)
    │  1. get_current_user() valida o JWT e identifica o usuário logado
-   │  2. ChatbotService monta o contexto (perfil + transações) filtrado por user_id
+   │  2. ChatbotService monta o contexto (perfil + suporte) filtrado por user_id
    │  3. Envia prompt para o Ollama
    ▼
 Ollama (local) — modelo qwen2.5:3b
@@ -81,11 +81,20 @@ ollama serve
 
 ```
 chatbot/
+├── chroma_db/
 ├── data/
-│   └── prompt.md          # System prompt do assistente (Satoshi)
-├── models.py               # ChatRequest (schema da requisição)
-├── services.py              # ChatbotService — lógica principal
-└── router.py                 # Rota /api/chatbot-text
+│   └── rag.md                         # Políticas do banco
+├── docs/
+│   └── architecture/
+|       └── policy_subagent.md        # Arquitetura do subagente
+├── langchain/
+|   ├── langchain_load_docs.py        # Gera embeddings com Chroma
+|   ├── policy_subagent.py            # Subagente que gera respostas sobre políticas do banco
+|   ├── satoshi_agent.py              # Agente Langchain — lógica principal
+|   ├── view_db.py                    # Detalhamento dos chunks
+│   └── web_tools.py                  # Coleção de ferramentas para o agente
+├── models.py                         # ChatRequest (schema da requisição)
+└── router_chatbot.py                 # Rota /api/chatbot-text
 ```
 
 ## Endpoint
@@ -116,16 +125,19 @@ chatbot/
 | 500 | Erro interno (banco de dados ou processamento) |
 | 503 | Ollama indisponível |
 
-## Como o contexto do usuário é montado
 
-O `ChatbotService.generate_reply(user_id, message)`:
+## 🛠️ Estrutura do Agente e Ferramentas (Tools)
 
-1. Verifica se a mensagem contém palavras-chave financeiras (`saldo`, `balance`, `transaction`, `sent`, `recebi`, etc.)
-2. Se sim, busca na NEON:
-   - Perfil do usuário (`_get_user_profile`)
-   - Últimas transações, considerando o usuário como remetente **ou** destinatário (`_get_user_transactions`)
-3. Monta o prompt final combinando o `system_prompt` (de `data/prompt.md`) + contexto do cliente + a pergunta
-4. Envia ao Ollama via `POST /api/generate`
+O `build_agent_executor() -> AgentExecutor`:
+
+O executor do agente é construído utilizando a função `create_tool_calling_agent` e tem acesso às seguintes ferramentas:
+
+* `get_user_profile`: Busca informações de perfil do investidor.
+* `get_user_transactions`: Recupera o histórico de transações e extratos do cliente.
+* `get_bank_support`: Subagente acionado para suporte institucional e dúvidas sobre RAG.
+
+1. Monta o prompt final combinando o `system_prompt` + contexto do cliente + a pergunta
+2. Envia ao Ollama via `POST /api/generate`
 
 Isso evita enviar dados financeiros desnecessários em mensagens simples (ex: "Olá!"), reduzindo o tamanho do prompt e o tempo de resposta.
 
