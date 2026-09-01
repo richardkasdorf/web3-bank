@@ -27,10 +27,20 @@ The project follows a domain-driven modular architecture for scalability and cle
 │   │   ├── __init__.py
 │   │   └── blockchain.py
 ├── 📁 chatbot/                             
-│   ├── __init__.py
-│   ├── models.py                     
-│   ├── route_chatbot.py
-│   └── services.py
+|   ├── chroma_db/
+|   ├── data/
+|   │   └── rag.md                         # Políticas do banco
+|   ├── docs/
+|   │   └── architecture/
+|   |       └── policy_subagent.md        # Arquitetura do subagente
+|   ├── langchain/
+|   |   ├── langchain_load_docs.py        # Gera embeddings com Chroma
+|   |   ├── policy_subagent.py            # Subagente que gera respostas sobre políticas do banco
+|   |   ├── satoshi_agent.py              # Agente Langchain — lógica principal
+|   |   ├── view_db.py                    # Detalhamento dos chunks
+|   │   └── web_tools.py                  # Coleção de ferramentas para o agente
+|   ├── models.py                         # ChatRequest (schema da requisição)
+|   └── router_chatbot.py                 # Rota /api/chatbot-text
 ├── 📁 db/                             
 │   ├── __init__.py
 │   ├── crud.py                     
