@@ -10,18 +10,40 @@ VAULT_URL = os.getenv("VAULT_URL", "http://localhost:8200")
 VAULT_TOKEN = os.getenv("VAULT_TOKEN", "root_token_estudo")
 
 # ====================== Vault Config ======================
-def get_master_key_from_vault():
-    client = hvac.Client(url = VAULT_URL, token = VAULT_TOKEN)
-    try:
-        read_response = client.secrets.kv.v2.read_secret_version(
-            path = 'config',
-            raise_on_deleted_version = True 
-        )
-        secrets = read_response['data']['data']
-        return secrets['secretkey']
+# def get_master_key_from_vault():
+#     client = hvac.Client(url = VAULT_URL, token = VAULT_TOKEN)
+#     try:
+#         read_response = client.secrets.kv.v2.read_secret_version(
+#             path = 'config',
+#             raise_on_deleted_version = True 
+#         )
+#         secrets = read_response['data']['data']
+#         return secrets['secretkey']
         
-    except Exception as e:
-        raise Exception(f"❌ Vault access error: {str(e)}")
+#     except Exception as e:
+#         raise Exception(f"❌ Vault access error: {str(e)}")
+
+# ====================== Vault Config & Fallback ======================
+def get_master_key_from_vault():
+    if VAULT_URL and VAULT_TOKEN:
+        try:
+            client = hvac.Client(url=VAULT_URL, token=VAULT_TOKEN)
+            read_response = client.secrets.kv.v2.read_secret_version(
+                path='config',
+                raise_on_deleted_version=True 
+            )
+            secrets = read_response['data']['data']
+            print("🔑 Master Key recovered from Vault (Local).")
+            return secrets['secretkey']
+        except Exception as vault_error:
+            print(f"⚠️ Warning: Vault connection failed. Trying Environment Variables... (Error: {vault_error})")
+
+    master_key_env = os.getenv("MASTER_SECRET_KEY")
+    if master_key_env:
+        print("🔒 Master Key recovered from Environment Variables (Render).")
+        return master_key_env
+
+    raise Exception("❌ Error to get the Master Key (Vault out and MASTER_SECRET_KEY out).")
 
 
 def decrypt_data():
