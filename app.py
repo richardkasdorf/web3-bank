@@ -6,6 +6,7 @@ from blockchain_services.routes.route_circle_listener import router as webhooks_
 from blockchain_services.routes.route_blockchain_transfer import router as blockchain_transfer
 from chatbot.route_chatbot import router as chatbot_router
 from fastapi.middleware.cors import CORSMiddleware
+from blockchain_services.routes.route_transaction_status import router as transaction_status_router
 
 
 Base.metadata.create_all(bind=engine)
@@ -28,10 +29,11 @@ origins = [
 # CORS Middleware config
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,          # URL access permission
+    allow_origins=["*"],          # URL access permission -> substituir qnd for teste local **allow_origins=origins**
     allow_credentials=True,         # Cookies/headers auth permission
     allow_methods=["*"],            # Method permission (GET, POST, PUT, DELETE, etc)
     allow_headers=["*"],            # Permit all headers (Authorization Bearer included)
+    expose_headers=["*"],
 )
 
 # Internal Route - Bank Operation
@@ -46,4 +48,8 @@ app.include_router(webhooks_router)
 
 # ChatBot
 app.include_router(chatbot_router)
+
+# Blockchain Route - Transaction Status Stream
+app.include_router(transaction_status_router)
+
 

@@ -2,14 +2,18 @@ from fastapi import Depends, Request, status, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import OperationalError
 from decimal import Decimal
-import logging
-import time
+import logging, time
 from db.database import get_db 
 from accounts.models import Account, TransactionLedger
 from datetime import datetime
+from blockchain_services.services.transaction_events import status_manager
+
+
 
 logger = logging.getLogger("uvicorn")
 router = APIRouter(tags=["Webhook"])
+
+
 
 @router.post("/webhooks/circle", status_code=status.HTTP_200_OK)
 async def circle_webhook(request: Request, db: Session = Depends(get_db)):
@@ -27,8 +31,12 @@ async def circle_webhook(request: Request, db: Session = Depends(get_db)):
     state = notification.get("state")
     circle_wallet_id = notification.get("walletId")
     tx_hash = notification.get("txHash")
+    circle_tx_id = notification.get("id")
     
     logger.info(f"🔍 Tx Status: {tx_hash} | Circle State: {state}")
+
+    if state in ["CONFIRMED", "COMPLETE"]:
+        await status_manager.mark_complete(circle_tx_id)
     
     if state not in ["CONFIRMED", "COMPLETE"]:
         return {"status": "ignored", "reason": f"🔄️ Awaiting settlement. Status: {state}"}
