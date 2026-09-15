@@ -6,6 +6,7 @@ from accounts.models import Bank
 
 load_dotenv()
 
+
 VAULT_URL = os.getenv("VAULT_URL", "http://localhost:8200")
 VAULT_TOKEN = os.getenv("VAULT_TOKEN", "root_token_estudo")
 
