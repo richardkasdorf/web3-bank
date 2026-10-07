@@ -5,6 +5,7 @@ from uuid import UUID
 from typing import List, Optional
 
 
+
 class CreateAccount(BaseModel):
     full_name: str
     email: EmailStr
@@ -45,7 +46,8 @@ class CircleWalletData(BaseModel):
 class ContaRead(BaseModel):
     id: int = Field(..., description="ID interno da conta no banco de dados")
     user_id: int = Field(..., description="ID do usuário proprietário desta conta")
-    balance: Decimal = Field(..., description="Saldo atual da conta")
+    balance: Decimal = Field(..., description="Saldo atual da conta em USDC")
+    eth_balance: Decimal = Field(..., description="Saldo atual da conta em ETH")
     wallet_address: str = Field(..., description="Endereço público da carteira (Chave Pública)")
     blockchain: str = Field(..., description="Rede blockchain configurada (ex: ETH-SEPOLIA)")
     account_type: str = Field(..., description="Tipo de conta na blockchain (ex: EOA)")

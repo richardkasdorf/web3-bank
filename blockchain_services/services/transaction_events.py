@@ -1,6 +1,8 @@
 import asyncio
 from typing import Dict
 
+# Necessário na rota em /routes/route_transaction_status.py
+
 class TransactionStatusManager:
     def __init__(self):
         self._statuses: Dict[str, str] = {}

@@ -2,12 +2,14 @@ from db.database import Base
 from sqlalchemy import Column, String, Float, Integer, Numeric, ForeignKey, DateTime, LargeBinary 
 from sqlalchemy.orm import relationship
 from datetime import datetime
+from decimal import Decimal
 
 class Account(Base):
     __tablename__ = "accounts"
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), unique=True)
     balance = Column(Numeric(precision=20, scale=6), default=0.0)
+    eth_balance = Column(Numeric(precision=78, scale=19), default=Decimal('0.0'))
 
     wallet_address = Column(String, unique=True)
     circle_wallet_id = Column(String, unique=True, index=True, nullable=True)
@@ -34,17 +36,16 @@ class User(Base):
 class TransactionLedger(Base):
     __tablename__ = "transactions_ledger"
     id = Column(Integer, primary_key=True, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
     amount = Column(Numeric(precision=20, scale=6))
     type = Column(String)
-    tx_hash = Column(String, nullable=True)
-    
     from_account_id = Column(Integer, ForeignKey("accounts.user_id"), nullable=True)
     to_account_id = Column(Integer, ForeignKey("accounts.user_id"), nullable=True)
+    tx_hash = Column(String, nullable=True)
     external_from_address = Column(String, nullable=True)
     external_to_address = Column(String, nullable=True)
 
-    created_at = Column(DateTime, default=datetime.utcnow)
-
+    
 class Bank(Base):
     __tablename__ = "bank"
     id = Column(Integer, primary_key=True, index=True)

@@ -27,3 +27,5 @@ def get_statement(current_user: User = Depends(get_current_user), db: Session = 
     ).order_by(TransactionLedger.created_at.desc()).all()
 
     return transactions
+
+
