@@ -32,6 +32,149 @@ async def circle_webhook(request: Request, db: Session = Depends(get_db)):
     circle_wallet_id = notification.get("walletId")
     tx_hash = notification.get("txHash")
     circle_tx_id = notification.get("id")
+    token_id = notification.get("tokenId") # Identifica qual cripto pelo ID recebido da circle
+    
+    logger.info(f"🔍 Tx Status: {tx_hash} | Circle State: {state}")
+
+    if state in ["CONFIRMED", "COMPLETE"]:
+        await status_manager.mark_complete(circle_tx_id)
+    
+    if state not in ["CONFIRMED", "COMPLETE"]:
+        return {"status": "ignored", "reason": f"🔄️ Awaiting settlement. Status: {state}"}
+        
+    amounts_list = notification.get("amounts", [])
+    if not amounts_list:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="🔄️ No value found")
+
+    amount_value = Decimal(str(amounts_list[0]))
+    
+    account = db.query(Account).filter(Account.circle_wallet_id == circle_wallet_id).first()
+    if not account:
+        logger.warning(f"⚠️ Wallet {circle_wallet_id} not found.")
+        return {"status": "error", "message": "❌ Account does not exsist"}
+
+    max_retries = 3
+    retry_delay = 3
+
+    for attempt in range(max_retries):
+
+        try:
+            is_eth = token_id == "979869da-9115-5f7d-917d-12d434e56ae7"
+            token_suffix = "ETH" if is_eth else "USDC"
+
+            if notification_type == "transactions.inbound":
+                current_action_type = f"DEPOSIT_{token_suffix}"
+            else:
+                current_action_type = f"WITHDRAW_{token_suffix}"
+
+            already_processed = db.query(TransactionLedger).filter(TransactionLedger.tx_hash == tx_hash, TransactionLedger.type == current_action_type).first()
+
+            if already_processed:
+                logger.info(f"⚠️ Transaction {tx_hash} ({current_action_type}) already processed down. Skipping.")
+                return {"status": "success", "action": "already_processed"}
+
+            if notification_type == "transactions.inbound":
+                if is_eth:
+                    account.eth_balance += amount_value
+                else:
+                    account.balance += amount_value
+
+                nova_transacao = TransactionLedger(
+                    amount=amount_value,
+                    type=current_action_type,
+                    tx_hash=tx_hash,
+                    to_account_id=account.user_id,
+                    from_account_id=None,
+                    external_from_address=notification.get("sourceAddress"),
+                    external_to_address=account.wallet_address,
+                    created_at=datetime.utcnow()
+                )
+                db.add(nova_transacao)
+                logger.info(f"✅ RECEIVED & COMMITTED: +{amount_value} {token_id} to User {account.user_id}")
+
+            elif notification_type == "transactions.outbound":
+                if is_eth:
+                    account.eth_balance -= amount_value
+                else:
+                    account.balance -= amount_value
+                
+                nova_transacao = TransactionLedger(
+                    amount=amount_value,
+                    type=current_action_type,
+                    tx_hash=tx_hash,
+                    to_account_id=None,
+                    from_account_id=account.user_id,
+                    external_from_address=account.wallet_address,
+                    external_to_address=notification.get("destinationAddress"),
+                    created_at=datetime.utcnow()
+                )
+                db.add(nova_transacao)
+                logger.info(f"✅ RECEIVED & COMMITTED: -{amount_value} {token_id} to User {account.user_id}")
+
+            db.commit()
+            return {"status": "success", "action": "database_updated"}
+            
+        except OperationalError as op_err:
+            db.rollback()
+            if attempt == max_retries - 1:
+                logger.critical(f"❌ Neon database connection failed: {str(op_err)}")
+                raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database connection failed")
+            
+            logger.warning(f"⚠️ Neon in Cold Start. Attempt {attempt + 1} failed. Waiting {retry_delay}s...")
+            time.sleep(retry_delay)
+
+        except HTTPException as http_ex:
+            db.rollback()
+            raise http_ex
+
+        except Exception as e:
+            db.rollback()
+            logger.error(f"❌ Database error: {str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")
+
+
+
+
+
+
+
+
+
+'''
+from fastapi import Depends, Request, status, APIRouter, HTTPException
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import OperationalError
+from decimal import Decimal
+import logging, time
+from db.database import get_db 
+from accounts.models import Account, TransactionLedger
+from datetime import datetime
+from blockchain_services.services.transaction_events import status_manager
+
+
+
+logger = logging.getLogger("uvicorn")
+router = APIRouter(tags=["Webhook"])
+
+
+
+@router.post("/webhooks/circle", status_code=status.HTTP_200_OK)
+async def circle_webhook(request: Request, db: Session = Depends(get_db)):
+    payload = await request.json()
+    notification_type = payload.get("notificationType")
+
+    logger.info(f"📩 WEBHOOK RECEIVED - Tipo: {notification_type}")
+    
+    if notification_type == "webhooks.test":
+        return {"status": "success"}
+    if notification_type not in ["transactions.inbound", "transactions.outbound"]:
+        return {"status": "ignored", "reason": "❌ Notification type unmanaged"}
+        
+    notification = payload.get("notification", {})
+    state = notification.get("state")
+    circle_wallet_id = notification.get("walletId")
+    tx_hash = notification.get("txHash")
+    circle_tx_id = notification.get("id")
     
     logger.info(f"🔍 Tx Status: {tx_hash} | Circle State: {state}")
 
@@ -123,3 +266,5 @@ async def circle_webhook(request: Request, db: Session = Depends(get_db)):
             db.rollback()
             logger.error(f"❌ Database error: {str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")
+
+'''

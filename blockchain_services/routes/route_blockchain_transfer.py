@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from db.database import get_db
 from circle.web3 import utils, developer_controlled_wallets
 from decimal import Decimal
-from blockchain_services.blockchain_transfer import resolve_destination
+from blockchain_services.services.resolve_transfer import resolve_destination
 import os
 from blockchain_services.services.decrypt import decrypt_data
 
@@ -45,7 +45,7 @@ async def initiate_transfer(payload: TransferRequest, db: Session = Depends(get_
             "amounts": [f"{payload.amount:.6f}"],
             "feeLevel": "MEDIUM"
         })
-        
+
         transfer_response = transactions_api.create_developer_transaction_transfer(request_payload)
         transfer_data = transfer_response.data.to_dict()
         
