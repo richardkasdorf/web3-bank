@@ -23,7 +23,7 @@ abi_path = Path("blockchain_services/contracts/abi/usdc.json")
 with open(abi_path, "r") as f:
     ERC20_ABI = json.load(f)
 
-# Necessário instanciar a classe!!
+# MUST to instantiate the class!!
 # python -c "from blockchain_services.services.wallet_ledger_reconciliation import LedgerReconciliation; auditor = LedgerReconciliation(); auditor.fetch_blockchain_balance(); auditor.fetch_neon_balance()"
 class LedgerReconciliation:
     def __init__(self):

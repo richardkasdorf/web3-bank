@@ -11,7 +11,7 @@ from deepagents import create_deep_agent
 from langchain.agents.middleware import TodoListMiddleware
 from langgraph.checkpoint.memory import InMemorySaver
 
-# Agente em fase protótipo. Faz leitura de dados com sandbox E2B, gera relatório completo com gráficos e retorna para slack
+# Agent in the prototype phase. It reads data using the E2B sandbox, generates a comprehensive report with charts, and returns the results to Slack.
 
 load_dotenv()
 
@@ -19,8 +19,6 @@ os.environ["LANGSMITH_TRACING"] = "true"
 #os.environ["E2B_API_KEY"] = getpass.getpass()
 SCRIPT_DIR = Path(__file__).resolve().parent
 PERSIST_DIRECTORY = (SCRIPT_DIR.parent / "data").as_posix()
-
-
 
 def main():
 

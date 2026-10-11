@@ -1,55 +1,55 @@
-# Base de Conhecimento RAG - Banco Digital USDC
+# RAG Knowledge Base - USDC Digital Bank
 
-Este documento serve como banco de dados vetorial (RAG) para o assistente de IA do banco digital. Ele contém as regras de KYC, fluxos de transação e as dúvidas mais frequentes (FAQ) sobre a operação com a stablecoin USDC.
-
----
-
-## 1. Diretrizes de KYC (Know Your Customer) e Compliance
-
-### Níveis de Verificação de Conta
-* **Nível 1 (Básico):** Limite diário de \$5.000 USDC. Exige nome completo, data de nascimento, e-mail e telefone validado.
-* **Nível 2 (Verificado):** Limite diário de \$50.000 USDC. Exige foto do documento de identidade (RG, CNH ou Passaporte) e selfie biométrica.
-* **Nível 3 (Pro):** Sem limites operacionais estritos. Exige comprovante de residência atualizado (últimos 90 dias) e comprovação de origem de fundos para aportes volumosos.
-
-### Sinais de Alerta (Red Flags) de Prevenção à Lavagem de Dinheiro (AML)
-* **Fracionamento:** Múltiplas transações de valores imediatamente abaixo do limite de monitoramento de \$10.000 USDC.
-* **Inconsistência:** Movimentações incompatíveis com a renda declarada pelo perfil do usuário.
-* **Contas de Alto Risco:** Tentativas de envio ou recebimento de fundos vinculados a carteiras sancionadas ou mixers de criptomoedas (ex: Tornado Cash).
+This document serves as the vector database (RAG) for the digital bank's AI assistant. It contains KYC guidelines, transaction workflows, and frequently asked questions (FAQ) regarding operations with the USDC stablecoin.
 
 ---
 
-## 2. Fluxo de Transações com USDC
+## 1. KYC (Know Your Customer) and Compliance Guidelines
 
-### Depósito (Fiat para USDC)
-1. **Solicitação:** O usuário solicita um depósito em moeda fiduciária (ex: via Pix ou transferência bancária).
-2. **Conversão:** O banco recebe os fundos e emite a quantidade equivalente em USDC na proporção exata de 1:1.
-3. **Crédito:** O saldo em USDC fica disponível na conta digital do usuário em até 10 minutos após a compensação fiduciária.
+### Account Verification Levels
+* **Level 1 (Basic):** Daily limit of \$5,000 USDC. Requires full name, date of birth, email, and validated phone number.
+* **Level 2 (Verified):** Daily limit of \$50,000 USDC. Requires a photo of an identity document (ID card, Driver's License, or Passport) and a biometric selfie.
+* **Level 3 (Pro):** No strict operational limits. Requires updated proof of residence (last 90 days) and proof of source of funds for high-volume deposits.
 
-### Envio de USDC (Cadeia / Blockchain)
-1. **Redes Suportadas:** O banco opera nativamente via rede **Ethereum** para garantir escalabilidade.
-2. **Validação de Endereço:** A IA ou o app deve validar se o endereço de destino (chave pública de 42 caracteres começando com `0x`) pertence à mesma rede selecionada pelo usuário.
-3. **Custódia Interna:** Transferências entre usuários do próprio banco digital são instantâneas e possuem taxa zero (off-chain).
-
-### Saque (USDC para Fiat)
-1. **Conversão Reversa:** O usuário vende seus USDC dentro do app.
-2. **Liquidação:** O banco queima ou retém os USDC e inicia a transferência fiduciária para a conta bancária de mesma titularidade do usuário.
+### Anti-Money Laundering (AML) Red Flags
+* **Structuring (Smurfing):** Multiple transactions of values just below the \$10,000 USDC monitoring threshold.
+* **Inconsistency:** Account movements that are incompatible with the income declared in the user's profile.
+* **High-Risk Accounts:** Attempts to send or receive funds linked to sanctioned wallets or cryptocurrency mixers (e.g., Tornado Cash).
 
 ---
 
-## 3. FAQ (Perguntas Frequentes) do Banco Digital
+## 2. USDC Transaction Workflow
 
-### Q1: O que é a USDC e qual a sua segurança?
-A USD Coin (USDC) é uma stablecoin emparelhada ao dólar americano na proporção de 1:1. Ela é emitida pela Circle e é totalmente auditada, garantindo que cada token em circulação possui um dólar equivalente em reservas de dinheiro ou títulos do Tesouro Americano de curto prazo.
+### Deposit (Fiat to USDC)
+1. **Request:** The user requests a deposit in fiat currency (e.g., via Pix or bank transfer).
+2. **Conversion:** The bank receives the funds and issues the equivalent amount in USDC at an exact 1:1 ratio.
+3. **Credit:** The USDC balance becomes available in the user's digital account within 10 minutes after fiat clearance.
 
-### Q2: Minha transação de USDC está travada. O que fazer?
-* **Transferência Interna:** Ocorre instantaneamente. Verifique se o saldo do remetente foi debitado.
-* **Transferência Externa (Blockchain):** Solicite o Hash da Transação (TxID). Utilize um explorador de blocos (como PolygonScan ou Arbiscan) para verificar o status do processamento na rede. Se estiver "Pendente", a rede blockchain está congestionada e é necessário aguardar.
+### Sending USDC (On-Chain / Blockchain)
+1. **Supported Networks:** The bank operates natively via the **Ethereum** network to ensure scalability.
+2. **Address Validation:** The AI or the app must validate that the destination address (a 42-character public key starting with `0x`) belongs to the same network selected by the user.
+3. **Internal Custody:** Transfers between users of the same digital bank are instantaneous and have zero fees (off-chain).
 
-### Q3: Posso cancelar uma transferência de USDC já enviada?
-**Não.** Uma vez que a transação é confirmada e registrada na blockchain, ela se torna irreversível. Sempre confira o endereço de destino e a rede selecionada antes de confirmar com sua senha.
+### Withdrawal (USDC to Fiat)
+1. **Reverse Conversion:** The user sells their USDC within the app.
+2. **Settlement:** The bank burns or retains the USDC and initiates the fiat transfer to the bank account under the exact same ownership as the user.
 
-### Q4: Quais são as taxas aplicadas pelo banco?
-* **Abertura e Manutenção de Conta:** Gratuita.
-* **Transferências Internas:** Taxa zero.
-* **Saques e Depósitos em Fiat:** Taxa fixa de 0.5% sobre o valor convertido.
-* **Envio para Carteiras Externas:** Taxa de rede flutuante (gás) repassada integralmente ao usuário.
+---
+
+## 3. Digital Bank FAQ (Frequently Asked Questions)
+
+### Q1: What is USDC and how secure is it?
+USD Coin (USDC) is a stablecoin pegged to the US dollar at a 1:1 ratio. It is issued by Circle and is fully audited, ensuring that every token in circulation is backed by an equivalent dollar in cash reserves or short-term US Treasury bonds.
+
+### Q2: My USDC transaction is stuck. What should I do?
+* **Internal Transfer:** Occurs instantaneously. Verify if the sender's balance has been debited.
+* **External Transfer (Blockchain):** Request the Transaction Hash (TxID). Use a block explorer (such as PolygonScan or Arbiscan) to check the network processing status. If it is "Pending", the blockchain network is congested and you must wait.
+
+### Q3: Can I cancel a USDC transfer that has already been sent?
+**No.** Once a transaction is confirmed and recorded on the blockchain, it becomes irreversible. Always double-check the destination address and the selected network before confirming with your password.
+
+### Q4: What fees are applied by the bank?
+* **Account Opening and Maintenance:** Free.
+* **Internal Transfers:** Zero fees.
+* **Fiat Withdrawals and Deposits:** A flat fee of 0.5% on the converted amount.
+* **Sending to External Wallets:** A fluctuating network fee (gas) passed on entirely to the user.

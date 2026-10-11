@@ -1,10 +1,9 @@
 from dotenv import load_dotenv
 from langchain_ollama import ChatOllama
 from .web_tools import get_user_profile, get_user_transactions
-from .policy_subagent import get_bank_support
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from .policy_subagent import search_documentation
 from langchain_core.messages import HumanMessage, AIMessage
-from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
+from deepagents import create_deep_agent
 import os
 
 load_dotenv()
@@ -15,56 +14,43 @@ if "/api/" in OLLAMA_URL:
     OLLAMA_URL = OLLAMA_URL.split("/api/")[0]
 
 SYSTEM_PROMPT = """
-Seu Papel: 
-- Você é o Satoshi, analista financeiro sênior especializado em mercados globais, Blockchain e DeFi. 
-Seu Objetivo: 
-- Fornecer análises técnicas profundas, simplificar conceitos complexos e avaliar riscos e oportunidades de forma acessível com base no investor_profile de cada cliente.
-Suas Regras de Atuação:
-- Responda apenas perguntas relacionadas a conta do cliente como número da conta, mercado DEFI e blockchain, e mercado financeiro global.
-- Você é um "representante" do banco, e TEM autorização para passar informações como saldo, o número da conta do cliente, extrato.
-- Seja sempre direto nas respostas e resuma ao máximo, a menos que peçam uma resposta mais elaborada.
-- Responda apenas o que lhe for perguntado, nunca responda ou alucine em questões que não foram mencionadas.
-- Basear-se estritamente em dados reais (sem inventar números) e métricas on-chain/macroeconômicas.
-- Incluir sempre um aviso legal informativo (sem recomendações de investimento).
-- Avaliar riscos operacionais in DeFi (contratos, liquidez, auditorias) e conectar eventos tradicionais (CeFi) ao mercado cripto.
-- Ser transparente sobre limitações de dados em tempo real.
-- SE O USUÁRIO FIZER PERGUNTAS TÉCNICAS PROFUNDAS OU CONCEITUAIS SOBRE RAG (Retrieval-Augmented Generation) OU DOCUMENTAÇÃO INTERNA, VOCÊ DEVE DELEGAR PARA A FERRAMENTA 'get_bank_support'.
-Formato nas respostas: 
-- Manter uma postura profissional, pragmática e sem jargões de empolgação (hype). Escrever textos curtos, diretos e otimizados para a interface de um chatbot pequeno.
+Your Role: 
+- You are Satoshi, a senior financial analyst specialized in global markets, Blockchain, and DeFi. 
+Your Objective: 
+- Provide deep technical analyses, simplify complex concepts, and assess risks and opportunities in an accessible manner based on each client's investor_profile.
+- For ANY question about bank fees, maintenance fees, charges, limits, rules, policies or support, you MUST first call the tool `get_support` and answer ONLY from its result. 
+Never answer these from your own knowledge.
+Your Performance Rules:
+- Answer only questions related to the client's account—such as account number, DeFi and blockchain markets, and the global financial market, bank policies, rules and support.
+- You are a "representative" of the bank and HAVE authorization to provide information such as balance, client account number, and statements.
+- Always be direct in your answers and summarize as much as possible, unless a more detailed response is explicitly requested.
+- Answer only what you are asked; never answer or hallucinate on matters that were not mentioned.
+- Rely strictly on real data (without inventing numbers) and on-chain/macroeconomic metrics.
+- Always include an informative legal disclaimer (no investment recommendations).
+- Assess operational risks in DeFi (contracts, liquidity, audits) and connect traditional finance (CeFi) events to the crypto market.
+- Be transparent about real-time data limitations.
+- IF THE USER ASKS DEEP TECHNICAL OR CONCEPTUAL QUESTIONS ABOUT RAG (Retrieval-Augmented Generation) OR INTERNAL DOCUMENTATION, YOU MUST DELEGATE THEM TO THE subagent with [rag_subagent].
+Response Formatting: 
+- Maintain a professional, pragmatic posture, free of hype jargon. Write short, direct texts optimized for a small chatbot interface.
 """
 
-
-def build_agent_executor() -> AgentExecutor:
-    
-    llm = ChatOllama(model="qwen2.5:3b", 
-        model_provider="ollama", 
+llm = ChatOllama(model="qwen2.5:3b", 
         temperature=0, 
-        num_ctx=4096, 
+        num_ctx=8192, 
         base_url=OLLAMA_URL,
         timeout=120.0
     )
 
-    tools = [get_user_profile, get_user_transactions, get_bank_support]
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", SYSTEM_PROMPT),
-            MessagesPlaceholder(variable_name="chat_history"),
-            ("human", "{input}"),
-            MessagesPlaceholder(variable_name="agent_scratchpad"),
-        ]
-    )
 
-    agent = create_tool_calling_agent(llm, tools, prompt)
-    return AgentExecutor(
-        agent=agent,
-        tools=tools,
-        verbose=True,
-        max_iterations=5,
-    )
+agent = create_deep_agent(
+    model=llm,
+    tools=[get_user_profile, get_user_transactions, search_documentation],
+    system_prompt=SYSTEM_PROMPT,
+)
+
 
 def main():
 
-    executor = build_agent_executor()
     chat_history = []
 
     while True:
@@ -75,15 +61,36 @@ def main():
             break
 
         if not user_input:
-            continue         
+            continue  
 
-        result = executor.invoke(
-            {"input": user_input, "chat_history": chat_history}
-        )
-        output = result["output"]
+        stream = agent.stream_events({"messages": chat_history[-6:] + [HumanMessage(content=user_input)]}, version="v3",)
+        coordinator_messages: list[str] = []
+        subagent_handles = []
 
-        chat_history.append(HumanMessage(content=user_input))
-        chat_history.append(AIMessage(content=output))
+        for name, item in stream.interleave("messages", "subagents"):
+
+            if name == "messages":
+                print("[coordinator]", item.text)
+                coordinator_messages.append(item.text)
+            else:
+                print(f"[{item.name}] started")
+                subagent_handles.append(item)
+                for message in item.messages:
+                    print(f"[{item.name}]", message.text)
+                print(f"[{item.name}] status: {item.status}")
+
+        if subagent_handles:
+            for h in subagent_handles:
+                print(f"[TURNO] subagente={h.name} status={h.status}")
+        else:
+            print("[TURNO] nenhum subagente acionado")
+        
+        output = coordinator_messages[-1] if coordinator_messages else ""
+
+        if output:
+            chat_history.append(HumanMessage(content=user_input))
+            chat_history.append(AIMessage(content=output))
+
 
 if __name__ == "__main__":
     main()

@@ -12,7 +12,7 @@ import contextvars
 load_dotenv()
 
 API_BASE_URL = os.getenv("TRANSFER_API_BASE_URL", "http://localhost:8000")
-USER_AUTH_TOKEN = os.getenv("USER_AUTH_TOKEN") # Inconsistencia pois já tenho "current_user: User = Depends(get_current_user)"" na rota. Verificar aqui
+USER_AUTH_TOKEN = os.getenv("USER_AUTH_TOKEN")
 
 current_user_id: contextvars.ContextVar[Optional[int]] = contextvars.ContextVar(
     "current_user_id", default=None
@@ -20,11 +20,11 @@ current_user_id: contextvars.ContextVar[Optional[int]] = contextvars.ContextVar(
 
 @tool("get_transactions", args_schema=TransactionsArgs)
 def get_user_transactions(limit: int = 5):
-    """Consulta o extrato de transações do usuário autenticado no banco de dados.
-    Use esta ferramenta sempre que o usuário pedir para ver seu extrato, saldo,
-    histórico de transações, valores enviados ou recebidos em USDC.
-    Não é necessário informar conta ou ID de usuário — a consulta é sempre
-    feita para o usuário já autenticado na sessão atual."""
+    """Consults the transaction statement of the authenticated user in the database.
+    Use this tool whenever the user asks to see their statement, balance,
+    transaction history, or amounts sent or received in USDC.
+    It is not necessary to provide an account or user ID — the query is always
+    made for the user already authenticated in the current session."""
     user_id = current_user_id.get()
     if not user_id:
         return "Error: It was not possible to identify the authenticated user to view the statement."
@@ -67,10 +67,10 @@ def get_user_transactions(limit: int = 5):
 
 @tool("get_profile", args_schema=ClientArgs)
 def get_user_profile() -> str:
-    """REGRA: Retorne APENAS o que o usuário perguntar, se for perguntado sobre o perfil de 
-    investidor, responda apenas o perfil dele, Ex: Moderado, agressivo, defensivo.
-    Essa função serve para retornar alguns dados pessoais que não comprometem a segurança 
-    como saldo, email cadastrado, blockchain de operação, perfil de investidor..."""
+    """RULE: Return ONLY what the user asks for. If asked about their investor profile, 
+    respond only with their profile, e.g., Moderate, aggressive, defensive.
+    This function is used to return certain personal data that does not compromise security, 
+    such as balance, registered email, operating blockchain, investor profile..."""
     user_id = current_user_id.get()
     if not user_id:
         return "Error: It was not possible to identify the authenticated user to view the statement."

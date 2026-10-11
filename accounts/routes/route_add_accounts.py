@@ -19,6 +19,6 @@ async def create_user_with_account(data: CreateAccount, db: Session = Depends(ge
     except HTTPException as http_ex:
         raise http_ex
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro na rota: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Route Error: {str(e)}")
 
 

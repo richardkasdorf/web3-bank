@@ -54,7 +54,7 @@ def create_user_with_account(db: Session, user: CreateAccount, wallet: CircleWal
         return db_user
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Erro interno: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal Error: {str(e)}")
 
 
 
