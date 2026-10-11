@@ -14,14 +14,14 @@ Base.metadata.create_all(bind=engine)
 load_dotenv()
 
 app = FastAPI(
-    title="Banco Digital com Stablecoin",
-    description="API de banco digital integrada com USDC na Sepolia",
+    title="Web3 BANK",
+    description="Digital Banking API Integrated with USDC in Sepolia",
     version="1.0.0"
 )
 
 origins = [
-    "http://localhost:5173",  # Porta padrão do Vite
-    "http://localhost:5174",  # A porta atual que o Vite abriu!
+    "http://localhost:5173",
+    "http://localhost:5174",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
 ]

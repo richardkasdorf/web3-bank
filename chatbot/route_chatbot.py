@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from chatbot.models import ChatRequest
 from accounts.models import User
 from accounts.auth_model import get_current_user
-from .langchain.satoshi_agent import build_agent_executor
+from .langchain.satoshi_agent import agent
 from langchain_core.messages import HumanMessage, AIMessage
 from .langchain.web_tools import current_user_id
 
@@ -12,9 +12,7 @@ router = APIRouter(
     tags=["Chatbot"]
 )
 
-agent_executor = build_agent_executor()
-
-# Em produção, salvar isso em um banco de dados usando o current_user.id.
+# OBS TOTO: save this to a database using `current_user.id`.
 SESSION_HISTORY = {}
 
 @router.post("/chatbot-text", status_code=status.HTTP_200_OK)
@@ -26,7 +24,6 @@ async def chatbot_local(request: ChatRequest, current_user: User = Depends(get_c
             detail="A message is required."
         )
 
-    # Recuperando msg na memo
     if current_user.id not in SESSION_HISTORY:
         SESSION_HISTORY[current_user.id] = []
     chat_history = SESSION_HISTORY[current_user.id]
@@ -34,10 +31,12 @@ async def chatbot_local(request: ChatRequest, current_user: User = Depends(get_c
     uid_token = current_user_id.set(current_user.id)
 
     try:
-        result = agent_executor.invoke(
-            {"input": request.message, "chat_history": chat_history}
+        result = agent.invoke(
+            {"messages": chat_history[-6:] + [HumanMessage(content=request.message)]}
         )
-        bot_reply = result["output"]
+        for m in result["messages"]:
+            m.pretty_print()
+        bot_reply = result["messages"][-1].content
 
         if "sucesso" in bot_reply.lower() or "cancelada" in bot_reply.lower():
             SESSION_HISTORY[current_user.id] = []

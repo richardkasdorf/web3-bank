@@ -24,6 +24,7 @@ VAULT_TOKEN = os.getenv("VAULT_TOKEN", "root_token_estudo")
 #     except Exception as e:
 #         raise Exception(f"❌ Vault access error: {str(e)}")
 
+
 # ====================== Vault Config & Fallback ======================
 def get_master_key_from_vault():
     if VAULT_URL and VAULT_TOKEN:

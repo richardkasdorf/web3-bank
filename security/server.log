@@ -1,0 +1,7 @@
+2026-03-10 10:14:02 - INFO - IP 192.168.1.50 - Acessou a rota /home
+2026-03-10 10:15:20 - WARNING - IP 203.0.113.5 - Falha de login na rota /token com usuário 'admin'
+2026-03-10 10:15:21 - WARNING - IP 203.0.113.5 - Falha de login na rota /token com usuário 'root'
+2026-03-10 10:15:22 - WARNING - IP 203.0.113.5 - Falha de login na rota /token com usuário 'suporte'
+2026-03-10 10:15:23 - WARNING - IP 203.0.113.5 - Falha de login na rota /token com usuário '123456'
+
+

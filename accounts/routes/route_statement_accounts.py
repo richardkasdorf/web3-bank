@@ -11,14 +11,15 @@ router = APIRouter(
     tags=["Account Statement"]
 )
 
-@router.get("/statement", response_model=List[TransactionRead])
+#@router.get("/statement", response_model=List[TransactionRead])
+@router.get("/statement")
 def get_statement(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
 
     account = db.query(Account).filter(Account.user_id == current_user.id).first()
     if not account:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Conta bancária não encontrada para este usuário."
+            detail="Account bank not found."
         )
 
     transactions = db.query(TransactionLedger).filter(
