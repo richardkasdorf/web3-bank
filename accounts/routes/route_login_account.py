@@ -30,13 +30,13 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
 
     access_token = create_access_token(data={"sub": str(user.id)})
 
-    IS_PRODUCTION = os.getenv("ENV") == "production" 
+#    IS_PRODUCTION = os.getenv("ENV") == "production" 
     # Token | Security
     response.set_cookie(
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=IS_PRODUCTION,
+        secure=True,
         samesite="lax",
         max_age=1800,
         path="/"
