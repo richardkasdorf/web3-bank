@@ -11,8 +11,7 @@ router = APIRouter(
     tags=["Account Statement"]
 )
 
-#@router.get("/statement", response_model=List[TransactionRead])
-@router.get("/statement")
+@router.get("/statement", response_model=List[TransactionRead])
 def get_statement(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
 
     account = db.query(Account).filter(Account.user_id == current_user.id).first()
