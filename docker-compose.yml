@@ -56,6 +56,8 @@ services:
     image: ngrok/ngrok:latest
     restart: always
     profiles: ["tunnel"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "4040:4040"
     command: ["http", "host.docker.internal:11434", "--host-header=localhost:11434"]
