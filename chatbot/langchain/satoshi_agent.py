@@ -8,7 +8,7 @@ import os
 
 load_dotenv()
 
-OLLAMA_URL = os.getenv('OLLAMA_URL', 'http://docker.internal')
+OLLAMA_URL = os.environ["OLLAMA_URL"]
 
 if "/api/" in OLLAMA_URL:
     OLLAMA_URL = OLLAMA_URL.split("/api/")[0]

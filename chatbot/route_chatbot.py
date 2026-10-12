@@ -48,7 +48,7 @@ async def chatbot_local(request: ChatRequest, current_user: User = Depends(get_c
         return {"response": bot_reply}
 
     except Exception as e:
-        traceback.print_exc(f"[Chatbot Error]: {str(e)}")
+        traceback.print_exc()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error processing the response in the Artificial Intelligence engine."
