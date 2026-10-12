@@ -5,6 +5,7 @@ from accounts.auth_model import get_current_user
 from .langchain.satoshi_agent import agent
 from langchain_core.messages import HumanMessage, AIMessage
 from .langchain.web_tools import current_user_id
+import traceback
 
 
 router = APIRouter(
@@ -12,7 +13,7 @@ router = APIRouter(
     tags=["Chatbot"]
 )
 
-# OBS TOTO: save this to a database using `current_user.id`.
+# OBS TO DO: save this to a database using `current_user.id`.
 SESSION_HISTORY = {}
 
 @router.post("/chatbot-text", status_code=status.HTTP_200_OK)
@@ -47,7 +48,7 @@ async def chatbot_local(request: ChatRequest, current_user: User = Depends(get_c
         return {"response": bot_reply}
 
     except Exception as e:
-        print(f"[Chatbot Error]: {str(e)}")
+        traceback.print_exc(f"[Chatbot Error]: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error processing the response in the Artificial Intelligence engine."

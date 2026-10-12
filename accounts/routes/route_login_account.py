@@ -9,6 +9,9 @@ from accounts.auth_model import create_access_token, verify_password
 
 router = APIRouter(tags=["Authentication"])
 
+COOKIE_SECURE = os.getenv("COOKIE_SECURE", "true") == "true"
+COOKIE_SAMESITE = os.getenv("COOKIE_SAMESITE", "none")
+
 @router.post("/token")
 def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
@@ -36,8 +39,8 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=True,
-        samesite="None",
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
         max_age=1800,
         path="/"
     )
