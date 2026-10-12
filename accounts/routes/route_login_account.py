@@ -37,7 +37,7 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
         value=access_token,
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="None",
         max_age=1800,
         path="/"
     )
