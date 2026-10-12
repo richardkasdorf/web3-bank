@@ -57,7 +57,7 @@ def main():
         try:
             user_input = input(" ").strip()
         except (EOFError, KeyboardInterrupt):
-            print("\nEncerrando.")
+            print("\nShutting down.")
             break
 
         if not user_input:
@@ -81,9 +81,9 @@ def main():
 
         if subagent_handles:
             for h in subagent_handles:
-                print(f"[TURNO] subagente={h.name} status={h.status}")
+                print(f"[TURNO] subagent={h.name} status={h.status}")
         else:
-            print("[TURNO] nenhum subagente acionado")
+            print("[TURNO] no sub-agent triggered")
         
         output = coordinator_messages[-1] if coordinator_messages else ""
 
