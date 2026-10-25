@@ -7,7 +7,7 @@ from blockchain_services.routes.route_blockchain_transfer import router as block
 from chatbot.route_chatbot import router as chatbot_router
 from fastapi.middleware.cors import CORSMiddleware
 from blockchain_services.routes.route_transaction_status import router as transaction_status_router
-
+import os
 
 Base.metadata.create_all(bind=engine)
 
@@ -29,10 +29,10 @@ origins = [
 # CORS Middleware config
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # URL access permission -> substituir qnd for teste local **allow_origins=origins**
+    allow_origins=[os.getenv("FRONTEND_ORIGIN")],          # URL access permission -> substituir qnd for teste local **allow_origins=origins**
     allow_credentials=True,         # Cookies/headers auth permission
-    allow_methods=["*"],            # Method permission (GET, POST, PUT, DELETE, etc)
-    allow_headers=["*"],            # Permit all headers (Authorization Bearer included)
+    allow_methods=["GET", "POST", "OPTIONS"],            # Method permission (GET, POST, PUT, DELETE, etc)
+    allow_headers=["Content-Type", "Authorization"],            # Permit all headers (Authorization Bearer included)
     expose_headers=["*"],
 )
 
