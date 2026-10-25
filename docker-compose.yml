@@ -8,6 +8,7 @@ services:
       - "8200:8200"
     environment:
       VAULT_DEV_ROOT_TOKEN_ID: "root_token_estudo" 
+    command: server -dev
     cap_add:
       - IPC_LOCK 
 
@@ -29,7 +30,6 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-      - bank_data:/data
     env_file:
       - .env
     extra_hosts:
@@ -54,17 +54,12 @@ services:
 
   ngrok:
     image: ngrok/ngrok:latest
-    restart: always
-    profiles: ["tunnel"]
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    ports:
-      - "4040:4040"
-    command: ["http", "host.docker.internal:11434", "--host-header=localhost:11434"]
+    profiles: ["webhook"]
+    ports: ["4040:4040"]
+    command: ["http", "api:8000", "--url=broiler-audition-celestial.ngrok-free.dev"]
     environment:
-      - NGROK_AUTHTOKEN=${NGROK_TOKEN}
-    depends_on:
-      - api
+      NGROK_AUTHTOKEN: ${NGROK_TOKEN}
+    depends_on: [api]
 
 volumes:
   bank_data:

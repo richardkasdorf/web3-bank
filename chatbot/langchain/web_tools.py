@@ -11,9 +11,6 @@ import contextvars
 
 load_dotenv()
 
-API_BASE_URL = os.getenv("TRANSFER_API_BASE_URL", "http://localhost:8000")
-USER_AUTH_TOKEN = os.getenv("USER_AUTH_TOKEN")
-
 current_user_id: contextvars.ContextVar[Optional[int]] = contextvars.ContextVar(
     "current_user_id", default=None
 )

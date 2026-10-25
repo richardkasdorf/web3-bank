@@ -9,8 +9,11 @@ from accounts.auth_model import create_access_token, verify_password
 
 router = APIRouter(tags=["Authentication"])
 
-COOKIE_SECURE = os.getenv("COOKIE_SECURE", "true") == "true"
-COOKIE_SAMESITE = os.getenv("COOKIE_SAMESITE", "none")
+COOKIE_SECURE = os.getenv("COOKIE_SECURE", "true").lower() == "true"
+COOKIE_SAMESITE = os.getenv("COOKIE_SAMESITE", "lax").lower()
+
+if COOKIE_SAMESITE == "none" and not COOKIE_SECURE:
+    raise RuntimeError("SameSite=None exige Secure=True")
 
 @router.post("/token")
 def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -49,5 +52,14 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
 
 
 
-
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie(
+        key="access_token",
+        path="/",
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        httponly=True,
+    )
+    return {"message": "Logged out"}
 
