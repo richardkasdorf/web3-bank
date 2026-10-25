@@ -27,9 +27,17 @@ origins = [
 ]
 
 # CORS Middleware config
+FRONTEND_ORIGINS = [
+    o.strip()
+    for o in os.getenv(
+        "FRONTEND_ORIGINS",
+        "https://web3-bank-frontend-steel.vercel.app",
+    ).split(",")
+    if o.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_ORIGIN")],          # URL access permission -> substituir qnd for teste local **allow_origins=origins**
+    allow_origins=FRONTEND_ORIGINS,          # URL access permission -> substituir qnd for teste local **allow_origins=origins**
     allow_credentials=True,         # Cookies/headers auth permission
     allow_methods=["GET", "POST", "OPTIONS"],            # Method permission (GET, POST, PUT, DELETE, etc)
     allow_headers=["Content-Type", "Authorization"],            # Permit all headers (Authorization Bearer included)
